@@ -50,6 +50,15 @@
 							</div>
 						</div>
 
+
+						<div class="form-group">
+							<label class="control-label col-md-3 col-sm-3 col-xs-12" for="descricao">Descrição (Atividade) <span class="required">*</span>
+							</label>
+							<div class="col-md-9 col-sm-9 col-xs-12">
+								<?php echo $this->Form->input('premio_id', array('class' => 'form-control ckeditor', 'options' => $premios, 'label' => false)) ?>
+						
+							</div>
+						</div>
 						
 
 						<!--<div class="form-group">
