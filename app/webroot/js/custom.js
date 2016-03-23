@@ -347,12 +347,12 @@ if (typeof NProgress != 'undefined') {
     }
 
     var optionSet1 = {
-        startDate: moment().subtract(29, 'days'),
+        startDate: moment().subtract(29, 'dias'),
         endDate: moment(),
-        minDate: '01/01/2012',
-        maxDate: '12/31/2015',
+        minDate: '01/01/2016',
+        maxDate: '12/31/2020',
         dateLimit: {
-            days: 60
+            days: 365
         },
         showDropdowns: true,
         showWeekNumbers: true,
@@ -374,13 +374,13 @@ if (typeof NProgress != 'undefined') {
         format: 'MM/DD/YYYY',
         separator: ' to ',
         locale: {
-            applyLabel: 'Submit',
-            cancelLabel: 'Clear',
-            fromLabel: 'From',
-            toLabel: 'To',
+            applyLabel: 'Enviar',
+            cancelLabel: 'Limpar',
+            fromLabel: 'De',
+            toLabel: 'Até',
             customRangeLabel: 'Custom',
-            daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
-            monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+            daysOfWeek: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
+            monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
             firstDay: 1
         }
     };

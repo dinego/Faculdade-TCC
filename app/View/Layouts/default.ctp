@@ -20,6 +20,9 @@
 		"maps/jquery-jvectormap-2.0.3.css",
 		"icheck/flat/green.css",
 		"floatexamples.css",
+		"normalize.css",
+		"ion.rangeSlider.css",
+		"ion.rangeSlider.skinFlat.css"
 
 		)); ?>
 
@@ -96,6 +99,31 @@
 												</li>
 												<li>
 													<?php echo $this->Html->link('Adicionar', array('controller' => 'users', 'action' => 'add')); ?>
+												</li>
+											</ul>
+										</li>
+
+										<li><a><i class="fa fa-pencil"></i> Atividades <span class="fa fa-chevron-down"></span></a>
+											<ul class="nav child_menu" style="display: none">
+												<li>
+													<?php echo $this->Html->link('Pesquisar', array('controller' => 'atividades', 'action' => 'index')); ?>
+												</li>
+												<li>
+													<?php echo $this->Html->link('Gerenciar', array('controller' => 'atividades', 'action' => 'index')); ?>
+												</li>
+												<li>
+													<?php echo $this->Html->link('Adicionar atividade', array('controller' => 'atividades', 'action' => 'add')); ?>
+												</li>
+											</ul>
+										</li>
+
+										<li><a><i class="fa fa-star"></i> Premiações <span class="fa fa-chevron-down"></span></a>
+											<ul class="nav child_menu" style="display: none">
+												<li>
+													<?php echo $this->Html->link('Gerenciar', array('controller' => 'premiacaos', 'action' => 'index')); ?>
+												</li>
+												<li>
+													<?php echo $this->Html->link('Adicionar premiação', array('controller' => 'premiacaos', 'action' => 'add')); ?>
 												</li>
 											</ul>
 										</li>
@@ -365,7 +393,8 @@
 				"maps/jquery-jvectormap-world-mill-en.js",
 				"maps/jquery-jvectormap-us-aea-en.js",
 				"skycons/skycons.min.js",
-				"custom.js"
+				"custom.js",
+				"ion_range/ion.rangeSlider.min.js"
 				)
 			)
 		?>
