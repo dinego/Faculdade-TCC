@@ -30,7 +30,6 @@ Class PremiacaosController extends AppController {
 
             if (array_search($ext, $_UP['extensoes']) === false) {
             	var_dump($ext);
-            	die('eae');
               $this->Flash->error(__("Por favor, envie arquivos com as seguintes extensões: jpg, png ou gif"));
               exit;
             }
