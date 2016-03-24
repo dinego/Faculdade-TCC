@@ -10,8 +10,8 @@ class Atividade extends AppModel {
         ));
 
     public $hasMany = array(
-        'Alternativas' => array(
-            'className' => 'Alternativas',
+        'Alternativa' => array(
+            'className' => 'Alternativa',
             'foreignKey' => 'atividade_id'
             )
         );
