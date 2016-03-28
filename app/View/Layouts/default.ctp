@@ -105,9 +105,6 @@
 										<li><a><i class="fa fa-users"></i> Usuários <span class="fa fa-chevron-down"></span></a>
 											<ul class="nav child_menu" style="display: none">
 												<li>
-													<?php echo $this->Html->link('Pesquisar', array('controller' => 'users', 'action' => 'index')); ?>
-												</li>
-												<li>
 													<?php echo $this->Html->link('Gerenciar', array('controller' => 'users', 'action' => 'index')); ?>
 												</li>
 												<li>

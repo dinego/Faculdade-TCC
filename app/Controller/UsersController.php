@@ -26,7 +26,18 @@ class UsersController extends AppController {
 
     public function index() {
         $this->User->recursive = 0;
-        $this->set('users', $this->paginate());
+
+        $options = array(
+            'conditions' => array('User.active' => 'true'),
+            'order' => array('User.created' => 'DESC'),
+            'limit' => 10
+        );
+
+        $this->paginate = $options;
+        // Roda a consulta, já trazendo os resultados paginados
+        $users = $this->paginate('User');
+        // Envia os dados pra view
+        $this->set('users', $users);
     }
 
     public function view($id = null) {
