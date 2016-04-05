@@ -8,6 +8,7 @@ class UsersController extends AppController {
         $this->Auth->allow('add', 'logout');
     }
 
+
 	public function login() {
         $this->set('title_for_layout', 'Login');
 		$this->layout  = "login";
@@ -25,6 +26,7 @@ class UsersController extends AppController {
 
 
     public function index() {
+        parent::isAuthorized($user);
         $this->User->recursive = 0;
 
         $options = array(
@@ -40,12 +42,7 @@ class UsersController extends AppController {
         $this->set('users', $users);
     }
 
-    public function view($id = null) {
-        if (!$this->User->exists($id)) {
-            throw new NotFoundException(__('Invalid user'));
-        }
-        $this->set('user', $this->User->findById($id));
-    }
+    
 
     public function add() {
         if ($this->request->is('post')) {

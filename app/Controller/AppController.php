@@ -39,16 +39,18 @@ class AppController extends Controller {
     public $components = array(
         'Flash',
         'Auth' => array(
-            'loginRedirect' => array('controller' => 'pages', 'action' => 'index'),
-            'logoutRedirect' => array('controller' => 'pages', 'action' => 'display', 'home')
+            'loginRedirect' => array('controller' => 'pages', 'action' => 'display', 'home'),
+            'logoutRedirect' => array('controller' => 'users', 'action' => 'login'),
+            'authorize' => array('Controller') // Adicionamos essa linha
         )
     );
 
     public function isAuthorized($user) {
-        if (isset($user['role']) && $user['role'] === 'admin') {
+        if (!empty($user['role']) && $user['role'] === 'admin') {
             return true; // Admin pode acessar todas actions
+        } else {
+            return $this->redirect(array('controller' => 'errors', 'action' => 'index'));
         }
-        return false; // Os outros usuários não podem
     }
 
     function beforeFilter() {

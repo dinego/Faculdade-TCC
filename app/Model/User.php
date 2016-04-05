@@ -12,6 +12,21 @@ class User extends AppModel {
 	    return true;
 	}
 
+    public $hasMany = array(
+        'Atividade' => array(
+            'className' => 'Atividade',
+            'foreignKey' => 'user_id'
+            )
+        );
+
+    public $hasOne = array(
+        'GrupoUser' => array(
+            'className' => 'GrupoUser',
+            'foreignKey' => 'user_id'
+            )
+        );
+
+
     public $validate = array(
         'username' => array(
             'required' => array(
@@ -27,7 +42,7 @@ class User extends AppModel {
         ),
         'role' => array(
             'valid' => array(
-                'rule' => array('inList', array('admin', 'professor', 'aluno')),
+                'rule' => array('inList', array('admin', 'prof', 'aluno')),
                 'message' => 'Please enter a valid role',
                 'allowEmpty' => false
             )

@@ -42,7 +42,7 @@
 						<?php foreach ($users as $key => $usr) { ?>
 							<tr>
 								<th scope="row"><?php echo $usr['User']['id'] ?></th>
-								<td><?php echo '<img src="' . $this->webroot . 'fotos/' . $usr['User']['id'] . '/' . $usr['User']['foto'] . '.jpg" class="img-circle" height="35">'; ?></td>	
+								<td><?php echo '<img src="' . $this->webroot . 'fotos/' . $usr['User']['id'] . '/' . $usr['User']['foto'] . '"	 class="img-circle" height="35">'; ?></td>	
 								<td><?php echo $usr['User']['nome'] ?></td>
 								<td><?php echo $usr['User']['username'] ?></td>
 								<td><?php echo $usr['User']['pontos'] ?></td>

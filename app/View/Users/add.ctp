@@ -11,8 +11,7 @@
 						<button class="btn btn-default" type="button">Go!</button>
 					</span>
 				</div>
-			</div> 
-	lo
+			</div>
 		</div>
 	</div>
 	<div class="clearfix"></div>

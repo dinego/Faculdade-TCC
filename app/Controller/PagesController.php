@@ -45,6 +45,62 @@ class PagesController extends AppController {
  *	or MissingViewException in debug mode.
  */
 	public function display() {
+
+		$this->loadModel('Atividade');
+		$participacoes = $this->Atividade->RespostaAtividade->find('count', array('conditions' => array('RespostaAtividade.user_id' => $this->Auth->user('id'))));
+		$this->set('participacoes', $participacoes);
+
+		//$this->User->recursive = 2;
+		$this->loadModel('User');
+		$user = $this->User->find('first', 
+			array(
+				'conditions' => array('User.id' => $this->Auth->user('id'))
+				)
+			);
+		$this->set('pontuacao', $user['User']['pontos']);
+
+		$this->User->GrupoUser->AcessoAtividade->recursive = 2;
+		$ativDisponiveis = $this->User->GrupoUser->AcessoAtividade->find('count', 
+			array(
+				'conditions' => array('grupo_id' => $user['GrupoUser']['id'])
+				)
+			);
+		$this->set('ativDisponiveis', $ativDisponiveis);
+
+		$this->loadModel('Atividade');
+		$totAtividades = $this->Atividade->find('count', array('fields' => 'DISTINCT Atividade.id'));
+		$this->set('totAtividades', $totAtividades);
+
+
+
+		$atividadesHome = $this->User->GrupoUser->AcessoAtividade->find('all', 
+			array(
+				'conditions' => array('grupo_id' => $user['GrupoUser']['id'])
+				)
+			);
+		$this->set('atividadesHome', $atividadesHome);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 		$path = func_get_args();
 
 		$count = count($path);

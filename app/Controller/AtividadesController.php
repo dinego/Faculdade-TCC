@@ -41,7 +41,7 @@ Class AtividadesController extends AppController {
 				// Tamanho máximo do arquivo (em Bytes)
 	            $_UP['tamanho'] = 2048 * 2048 * 2; // 2Mb
 	            // Array com as extensões permitidas
-	            $_UP['extensoes'] = array('doc', 'rar', 'zip', 'pdf', '');
+	            $_UP['extensoes'] = array('doc', 'rar', 'zip', 'pdf');
 	            // Renomeia o arquivo? (Se true, o arquivo será salvo como .jpg e um nome único)
 	            $_UP['renomeia'] = false;
 	            // Array com os tipos de erros de upload do PHP
