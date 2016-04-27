@@ -16,6 +16,10 @@ class User extends AppModel {
         'Atividade' => array(
             'className' => 'Atividade',
             'foreignKey' => 'user_id'
+            ),
+        'Premiacao' => array(
+            'className' => 'Premiacao',
+            'foreignKey' => 'user_id'
             )
         );
 

@@ -2,7 +2,7 @@
 <div class="">
 	<div class="page-title">
 		<div class="title_left">
-			<h3>Usuários</h3>
+			<h3>Atividades</h3>
 		</div>
 		<div class="title_right">
 			<div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
@@ -20,12 +20,22 @@
 		<div class="col-md-12 col-sm-12 col-xs-12">
 			<div class="x_panel">
 				<div class="x_title">
-					<h2>Adicionar Novo Usuário</h2>
+					<h2>Adicionar Nova Atividade</h2>
 					<div class="clearfix"></div>
 				</div>
 				<div class="x_content">
 					<br />
 					<?php echo $this->Form->create('Atividade', array("data-parsley-validate" => null, "class" => "form-horizontal form-label-left", "enctype" => "multipart/form-data")); ?>
+
+
+						<div class="form-group">
+							<label class="control-label col-md-3 col-sm-3 col-xs-12" for="descricao">Tipo da atividade <span class="required">*</span>
+							</label>
+							<div class="col-md-6 col-sm-6 col-xs-12">
+								<?php echo $this->Form->input('Atividade.tipo_atividade', array("class" => "col-md-6 col-xs-12 form-control", "label" => false, 'options' => array("" => '-- Selecione --', 1 => 'Alternativa', 2 => 'Dissertativa'))); ?>
+							</div>
+						</div>
+
 						<div class="form-group">
 							<label class="control-label col-md-3 col-sm-3 col-xs-12" for="rangeData">Período de tempo (de - até) <span class="required">*</span>
 							</label>
@@ -58,6 +68,7 @@
 								<?php echo $this->Form->input('Atividade.premiacaos_id', array('class' => 'fcol-md-6 col-xs-12 form-control', 'options' => $premios, 'label' => false)) ?>
 							</div>
 						</div>
+						<hr />
 
 						<div class="form-group">
 							<label class="control-label col-md-3 col-sm-3 col-xs-12" for="descricao">Arquivo de apoio <span class="required">*</span>
@@ -67,54 +78,21 @@
 							</div>
 						</div>
 
-						<div class="ln_solid"></div>
+						
 
-						<div class="form-group">
-							<label class="control-label col-md-3 col-sm-3 col-xs-12" for="descricao">Arquivo de apoio <span class="required">*</span>
-							</label>
-							<div class="col-md-6 col-sm-6 col-xs-12">
-								<?php echo $this->Form->input('Atividade.tipo_atividade', array("class" => "col-md-6 col-xs-12 form-control", "label" => false, 'options' => array(1 => 'Alternativa', 2 => 'Dissertativa'))); ?>
-							</div>
-						</div>
+						<script type="text/javascript">
+							$("#AtividadeTipoAtividade").on('change', function (){ 
+								if ($(this).val() == 2) {
 
+									$("#alternativas").html("");
+								} else {
+									$("#alternativas").html("<div class=\"ln_solid\"></div><div class=\"form-group\"><label class=\"control-label col-md-3 col-sm-3 col-xs-12\"></label><div class=\"col-md-6 col-sm-6 col-xs-12\">Alternativa</div><div class=\"col-md-2 col-sm-12 col-xs-12\">Resposta Certa</div></div>     <div class=\"form-group\"><label class=\"control-label col-md-3 col-sm-3 col-xs-12\" for=\"descricao\">1</label><div class=\"col-md-6 col-sm-6 col-xs-12\"><div class=\"input text\"><input name=\"data[Alternativa][1][alternativa]\" class=\"col-md-12 col-xs-12 form-control\" maxlength=\"255\" type=\"text\" id=\"Alternativa1Alternativa\"></div></div><div class=\"col-md-1 col-sm-12 col-xs-12\"><input name=\"data[RespostaAtividade][alternativa_id]\" class=\"col-md-12 col-xs-12 form-control\" maxlength=\"1\" type=\"radio\" value=\"1\"></div></div>     <div class=\"form-group\"><label class=\"control-label col-md-3 col-sm-3 col-xs-12\" for=\"descricao\">2</label><div class=\"col-md-6 col-sm-6 col-xs-12\"><div class=\"input text\"><input name=\"data[Alternativa][2][alternativa]\" class=\"col-md-12 col-xs-12 form-control\" maxlength=\"255\" type=\"text\" id=\"Alternativa1Alternativa\"></div></div><div class=\"col-md-1 col-sm-12 col-xs-12\"><div class=\"input text\"><input name=\"data[RespostaAtividade][alternativa_id]\" class=\"col-md-12 col-xs-12 form-control\" maxlength=\"1\" type=\"radio\" value=\"2\"></div></div></div>	<div class=\"form-group\"><label class=\"control-label col-md-3 col-sm-3 col-xs-12\" for=\"descricao\">3</label><div class=\"col-md-6 col-sm-6 col-xs-12\"><div class=\"input text\"><input name=\"data[Alternativa][3][alternativa]\" class=\"col-md-12 col-xs-12 form-control\" maxlength=\"255\" type=\"text\" id=\"Alternativa1Alternativa\"></div></div><div class=\"col-md-1 col-sm-12 col-xs-12\"><div class=\"input text\"><input name=\"data[RespostaAtividade][alternativa_id]\" class=\"col-md-12 col-xs-12 form-control\" maxlength=\"1\" type=\"radio\" value=\"3\"></div></div></div>	<div class=\"form-group\"><label class=\"control-label col-md-3 col-sm-3 col-xs-12\" for=\"descricao\">4</label><div class=\"col-md-6 col-sm-6 col-xs-12\"><div class=\"input text\"><input name=\"data[Alternativa][4][alternativa]\" class=\"col-md-12 col-xs-12 form-control\" maxlength=\"255\" type=\"text\" id=\"Alternativa1Alternativa\"></div></div><div class=\"col-md-1 col-sm-12 col-xs-12\"><div class=\"input text\"><input name=\"data[RespostaAtividade][alternativa_id]\" class=\"col-md-12 col-xs-12 form-control\" maxlength=\"1\" type=\"radio\" value=\"4\"></div></div></div>	<div class=\"form-group\"><label class=\"control-label col-md-3 col-sm-3 col-xs-12\" for=\"descricao\">5</label><div class=\"col-md-6 col-sm-6 col-xs-12\"><div class=\"input text\"><input name=\"data[Alternativa][5][alternativa]\" class=\"col-md-12 col-xs-12 form-control\" maxlength=\"255\" type=\"text\" id=\"Alternativa1Alternativa\"></div></div><div class=\"col-md-1 col-sm-12 col-xs-12\"><div class=\"input text\"><input name=\"data[RespostaAtividade][alternativa_id]\" class=\"col-md-12 col-xs-12 form-control\" maxlength=\"1\" type=\"radio\" value=\"5\"></div></div></div>");
+								}
+							});
 
+						</script>
 						<div id="alternativas">
-							<div class="form-group">
-								<label class="control-label col-md-3 col-sm-3 col-xs-12" for="descricao">1
-								</label>
-								<div class="col-md-6 col-sm-6 col-xs-12">
-									<?php echo $this->Form->input('Alternativa.1.alternativa', array("class" => "col-md-12 col-xs-12 form-control", "label" => false)); ?>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="control-label col-md-3 col-sm-3 col-xs-12" for="descricao">2
-								</label>
-								<div class="col-md-6 col-sm-6 col-xs-12">
-									<?php echo $this->Form->input('Alternativa.2.alternativa', array("class" => "col-md-12 col-xs-12 form-control", "label" => false)); ?>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="control-label col-md-3 col-sm-3 col-xs-12" for="descricao">3
-								</label>
-								<div class="col-md-6 col-sm-6 col-xs-12">
-									<?php echo $this->Form->input('Alternativa.3.alternativa', array("class" => "col-md-12 col-xs-12 form-control", "label" => false)); ?>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="control-label col-md-3 col-sm-3 col-xs-12" for="descricao">4
-								</label>
-								<div class="col-md-6 col-sm-6 col-xs-12">
-									<?php echo $this->Form->input('Alternativa.4.alternativa', array("class" => "col-md-12 col-xs-12 form-control", "label" => false)); ?>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="control-label col-md-3 col-sm-3 col-xs-12" for="descricao">5
-								</label>
-								<div class="col-md-6 col-sm-6 col-xs-12">
-									<?php echo $this->Form->input('Alternativa.5.alternativa', array("class" => "col-md-12 col-xs-12 form-control", "label" => false)); ?>
-								</div>
-							</div>
-
+						
 						</div>
 
 

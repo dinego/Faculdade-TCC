@@ -79,28 +79,6 @@ class PagesController extends AppController {
 				)
 			);
 		$this->set('atividadesHome', $atividadesHome);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 		$path = func_get_args();
 
 		$count = count($path);

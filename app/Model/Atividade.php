@@ -4,17 +4,17 @@ class Atividade extends AppModel {
     public $name = 'Atividade';
 
     public $hasOne = array(
-        'Alternativa' => array(
-            'className' => 'Alternativa',
+        'RespostaAtividade' => array(
+            'className' => 'RespostaAtividade',
             'foreignKey' => 'atividade_id'
-            ),
-        'Premiacao' => array(
-            'className' => 'Premiacao',
-            'foreignKey' => 'id'
             )
         );
 
     public $belongsTo = array(
+        'Premiacao' => array(
+            'className' => 'Premiacao',
+            'foreignKey' => 'premiacaos_id'
+            ),
         'User' => array(
             'className' => 'User',
             'foreignKey' => 'user_id'
@@ -24,10 +24,6 @@ class Atividade extends AppModel {
     public $hasMany = array(
         'Alternativa' => array(
             'className' => 'Alternativa',
-            'foreignKey' => 'atividade_id'
-            ),
-        'RespostaAtividade' => array(
-            'className' => 'RespostaAtividade',
             'foreignKey' => 'atividade_id'
             )
         );

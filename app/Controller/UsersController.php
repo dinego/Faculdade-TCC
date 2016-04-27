@@ -26,13 +26,15 @@ class UsersController extends AppController {
 
 
     public function index() {
-        parent::isAuthorized($user);
-        $this->User->recursive = 0;
 
+        parent::isAuthorized($this->Auth->user());
+
+        $this->User->recursive = 0;
         $options = array(
             'conditions' => array('User.active' => 'true'),
             'order' => array('User.created' => 'DESC'),
-            'limit' => 10
+            'limit' => 10,
+            'group' => 'User.id'
         );
 
         $this->paginate = $options;

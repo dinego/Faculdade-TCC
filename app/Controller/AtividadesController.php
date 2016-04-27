@@ -11,6 +11,8 @@ Class AtividadesController extends AppController {
     		'fields'     => array('Premiacao.id', 'Premiacao.titulo')
     	));
 
+    	$this->recursive = 2;
+
 		$this->set(compact('premios', $premios));
 
 		if ($this->request->is('post')) {
@@ -35,68 +37,73 @@ Class AtividadesController extends AppController {
 			$this->request->data['Atividade']['fim'] = date('Y-m-d', strtotime($dateFim));
 	
 
-			if ($this->request->data['Atividade']['arquivo']['error'] != 4) {
+			if (!empty($this->request->data['Atividade']['arquivo'])) {
+				if ($this->request->data['Atividade']['arquivo']['error'] != 4) {
 
-				$arquivo = $this->request->data['Atividade']['arquivo'];
-				// Tamanho máximo do arquivo (em Bytes)
-	            $_UP['tamanho'] = 2048 * 2048 * 2; // 2Mb
-	            // Array com as extensões permitidas
-	            $_UP['extensoes'] = array('doc', 'rar', 'zip', 'pdf');
-	            // Renomeia o arquivo? (Se true, o arquivo será salvo como .jpg e um nome único)
-	            $_UP['renomeia'] = false;
-	            // Array com os tipos de erros de upload do PHP
-	            $_UP['erros'][0] = 'Não houve erro';
-	            $_UP['erros'][1] = 'O arquivo no upload é maior do que o limite do PHP';
-	            $_UP['erros'][2] = 'O arquivo ultrapassa o limite de tamanho especifiado no HTML';
-	            $_UP['erros'][3] = 'O upload do arquivo foi feito parcialmente';
-	            $_UP['erros'][4] = 'Não foi feito o upload do arquivo';
-	            // Verifica se houve algum erro com o upload. Se sim, exibe a mensagem do erro
-	            if ($arquivo['error'] != 0) {
-	              die("Não foi possível fazer o upload, erro:" . $_UP['erros'][$arquivo['error']]);
-	              exit; // Para a execução do script
-	            }
-	            // Caso script chegue a esse ponto, não houve erro com o upload e o PHP pode continuar
-	            // Faz a verificação da extensão do arquivo
-	            $foto = $arquivo['name'];
-	            $ext = pathinfo($foto, PATHINFO_EXTENSION);
+					$arquivo = $this->request->data['Atividade']['arquivo'];
+					// Tamanho máximo do arquivo (em Bytes)
+		            $_UP['tamanho'] = 2048 * 2048 * 2; // 2Mb
+		            // Array com as extensões permitidas
+		            $_UP['extensoes'] = array('doc', 'rar', 'zip', 'pdf');
+		            // Renomeia o arquivo? (Se true, o arquivo será salvo como .jpg e um nome único)
+		            $_UP['renomeia'] = false;
+		            // Array com os tipos de erros de upload do PHP
+		            $_UP['erros'][0] = 'Não houve erro';
+		            $_UP['erros'][1] = 'O arquivo no upload é maior do que o limite do PHP';
+		            $_UP['erros'][2] = 'O arquivo ultrapassa o limite de tamanho especifiado no HTML';
+		            $_UP['erros'][3] = 'O upload do arquivo foi feito parcialmente';
+		            $_UP['erros'][4] = 'Não foi feito o upload do arquivo';
+		            // Verifica se houve algum erro com o upload. Se sim, exibe a mensagem do erro
+		            if ($arquivo['error'] != 0) {
+		              die("Não foi possível fazer o upload, erro:" . $_UP['erros'][$arquivo['error']]);
+		              exit; // Para a execução do script
+		            }
+		            // Caso script chegue a esse ponto, não houve erro com o upload e o PHP pode continuar
+		            // Faz a verificação da extensão do arquivo
+		            $foto = $arquivo['name'];
+		            $ext = pathinfo($foto, PATHINFO_EXTENSION);
 
-	            /*if (array_search($ext, $_UP['extensoes']) === false) {
-	            	var_dump($ext);
-	              $this->Flash->error(__("Por favor, envie arquivos com as seguintes extensões: jpg, png ou gif"));
-	              exit;
-	            }*/
+		            /*if (array_search($ext, $_UP['extensoes']) === false) {
+		            	var_dump($ext);
+		              $this->Flash->error(__("Por favor, envie arquivos com as seguintes extensões: jpg, png ou gif"));
+		              exit;
+		            }*/
 
-	            // Faz a verificação do tamanho do arquivo
-	            if ($_UP['tamanho'] < $arquivo['size']) {
-	              $this->Flash->error(__("O arquivo enviado é muito grande, envie arquivos de até 2Mb."));
-	              exit;
-	            }
-	            // O arquivo passou em todas as verificações, hora de tentar movê-lo para a pasta
-	            // Primeiro verifica se deve trocar o nome do arquivo
-	            if ($_UP['renomeia'] == true) {
-	              // Cria um nome baseado no UNIX TIMESTAMP atual e com extensão .jpg
-	              $nome_final = md5(time()).'.jpg';
-	            } else {
-	              // Mantém o nome original do arquivo
-	              $nome_final = $arquivo['name'];
-	          	}
+		            // Faz a verificação do tamanho do arquivo
+		            if ($_UP['tamanho'] < $arquivo['size']) {
+		              $this->Flash->error(__("O arquivo enviado é muito grande, envie arquivos de até 2Mb."));
+		              exit;
+		            }
+		            // O arquivo passou em todas as verificações, hora de tentar movê-lo para a pasta
+		            // Primeiro verifica se deve trocar o nome do arquivo
+		            if ($_UP['renomeia'] == true) {
+		              // Cria um nome baseado no UNIX TIMESTAMP atual e com extensão .jpg
+		              $nome_final = md5(time()).'.jpg';
+		            } else {
+		              // Mantém o nome original do arquivo
+		              $nome_final = $arquivo['name'];
+		          	}
 
+		          	$this->request->data['Atividade']['arquivo'] = $nome_final;
+		        } else {
+		        	$this->request->data['Atividade']['arquivo'] = "";
+		        }
 
 	            $this->request->data['Atividade']['user_id'] = $user['id'];
 
-	            // Upload efetuado com sucesso, exibe uma mensagem e um link para o arquivo
-
-	            $this->request->data['Atividade']['arquivo'] = $nome_final;
+	            $this->request->data['RespostaAtividade']['user_id'] = $user['id'];
 
 	            if ($this->Atividade->saveAll($this->request->data)) {
 
-	                $_UP['pasta'] = WWW_ROOT . "fotos/" . $user['id'] . "/atividades/auxiliar/" . $this->Atividade->id . "/";
+	            	if (!empty($this->request->data['Atividade']['arquivo'])) {
+		                $_UP['pasta'] = WWW_ROOT . "fotos/" . $user['id'] . "/atividades/auxiliar/" . $this->Atividade->id . "/";
 
-	                if (!file_exists($_UP['pasta'])) {
-	                    mkdir($_UP['pasta'], 0777, true);
-	                }
+		                if (!file_exists($_UP['pasta'])) {
+		                    mkdir($_UP['pasta'], 0777, true);
+		                }
 
-	                move_uploaded_file($arquivo['tmp_name'], $_UP['pasta'] . $nome_final);
+		                move_uploaded_file($arquivo['tmp_name'], $_UP['pasta'] . $nome_final);
+		            }
 
 	                $this->Flash->success(__('Atividade salva com Sucesso'));
 	                $this->redirect(array('action' => 'index'));
@@ -113,5 +120,21 @@ Class AtividadesController extends AppController {
 	            }
 	        }
 		}
+	}
+
+	public function index() {
+		//$atividades = $this->Atividade->find('all', array('conditions' => array('Atividade.user_id' == $this->Auth->user('id'))));
+
+        $options = array('conditions' => array('Atividade.user_id' == $this->Auth->user('id')),
+        	'order' => array('Atividade.created' => 'DESC'),
+            'limit' => 10,
+            'group' => 'Atividade.id'
+            );
+
+        $this->paginate = $options;
+        // Roda a consulta, já trazendo os resultados paginados
+        $atividades = $this->paginate('Atividade');
+        // Envia os dados pra view
+        $this->set('atividades', $atividades);
 	}
 }
