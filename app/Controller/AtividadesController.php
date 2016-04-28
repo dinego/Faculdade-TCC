@@ -1,6 +1,21 @@
 <?php 
 
 Class AtividadesController extends AppController {
+
+	public function isAuthorized($user) {
+        if (parent::isAuthorized($user)) {
+            if ($this->action === 'add') {
+                // Todos os usuários registrados podem criar posts
+                return true;
+            }
+            if (in_array($this->action, array('edit', 'delete'))) {
+                $id = (int) $this->request->params['pass'][0];
+
+                return $this->Atividade->isOwnedBy($id, $user['id']);
+            }
+        }
+        return false;
+    }
 	
 	public function add() {
 
@@ -122,7 +137,30 @@ Class AtividadesController extends AppController {
 		}
 	}
 
+	public function edit($id = null)
+	{
+
+		if ($this->Atividade->isOwnedBy($id, $this->Auth->user('id'))) {
+			die('eae');
+			$this->set('atividade', $atividade);
+
+			if ($this->request->is('post')) {
+
+			}
+		} else {
+			$this->Flash->setFlash('Essa atividade não pertênce à você!');
+		}
+	    
+	}
+
+	//edit
+	
+
 	public function index() {
+
+		$ativ = $this->Atividade->find('first');
+
+        
 		//$atividades = $this->Atividade->find('all', array('conditions' => array('Atividade.user_id' == $this->Auth->user('id'))));
 
         $options = array('conditions' => array('Atividade.user_id' == $this->Auth->user('id')),
@@ -136,5 +174,7 @@ Class AtividadesController extends AppController {
         $atividades = $this->paginate('Atividade');
         // Envia os dados pra view
         $this->set('atividades', $atividades);
+
+        
 	}
 }

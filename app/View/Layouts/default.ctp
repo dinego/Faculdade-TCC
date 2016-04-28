@@ -1,3 +1,8 @@
+<?php 
+	echo $this->Session->flash('good');
+echo $this->Session->flash('bad');
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -39,15 +44,17 @@
 
 
 		  <script type="text/javascript">
+			  $(document).ready(function () {
+			  	<?php if (!empty($this->Flash->render())) { ?>
 
-		  	<?php if ($this->Flash->render()) { ?>
-			  	$(function() {
-				  	new PNotify({
-				  		title: 'Notificação!',
-		                text: '<?php echo $this->Flash->render(); ?>'
-		            });
-				}
-	        <?php } ?>
+			  		new PNotify({
+	                    title: 'New Thing',
+	                    text: 'Just to let you know, something happened.',
+	                    type: 'info'
+	                });
+		        <?php } ?>
+		    });
+		  	
 
 		  </script>
 

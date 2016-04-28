@@ -3,6 +3,10 @@
 class Atividade extends AppModel {
     public $name = 'Atividade';
 
+    public function isOwnedBy($atividade, $user) {
+        return $this->field('id', array('id' => $atividade, 'user_id' => $user)) === $atividade;
+    }
+
     public $hasOne = array(
         'RespostaAtividade' => array(
             'className' => 'RespostaAtividade',

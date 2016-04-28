@@ -59,11 +59,11 @@
 									?>
 								</td>
 								<td>
-									<a href="<?php echo $this->Html->url(array('controller' => 'users', 'action' => 'edit', $atividade['Atividade']['id'])) ?>" class="btn btn-primary">Editar</a>
+									<a href="<?php echo $this->Html->url(array('controller' => 'atividades', 'action' => 'edit', $atividade['Atividade']['id'])) ?>" class="btn btn-primary">Editar</a>
 
-									<a href="<?php echo $this->Html->url(array('controller' => 'users', 'action' => 'desativar', $atividade['Atividade']['id'])) ?>" class="btn btn-default">Desativar</a>
+									<a href="<?php echo $this->Html->url(array('controller' => 'atividades', 'action' => 'desativar', $atividade['Atividade']['id'])) ?>" class="btn btn-default">Desativar</a>
 
-									<a href="<?php echo $this->Html->url(array('controller' => 'users', 'action' => 'delete', $atividade['Atividade']['id'])) ?>" class="btn btn-danger">Excluir</a>
+									<a href="<?php echo $this->Html->url(array('controller' => 'atividades', 'action' => 'delete', $atividade['Atividade']['id'])) ?>" class="btn btn-danger">Excluir</a>
 								</td>
 							</tr>
 						<?php } ?>

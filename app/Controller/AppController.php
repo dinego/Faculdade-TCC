@@ -49,7 +49,7 @@ class AppController extends Controller {
         if (!empty($user['role']) && $user['role'] === 'admin') {
             return true; // Admin pode acessar todas actions
         } else {
-            return $this->redirect(array('controller' => 'errors', 'action' => 'index'));
+            return false;
         }
     }
 
