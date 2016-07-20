@@ -14,7 +14,11 @@ class UsersController extends AppController {
 		$this->layout  = "login";
 
 	    if ($this->Auth->login()) {
-	        $this->redirect($this->Auth->redirect());
+            if ($this->Auth->user('role') == 'admin') {
+                $this->redirect($this->Auth->redirect());
+            } else {
+                $this->redirect(array('controller' => 'pages', 'action' => 'display', 'home'));
+            }	        
 	    } else {
 	        $this->Flash->error(__('Usuário ou senha invalida, tente novamente!'));
 	    }

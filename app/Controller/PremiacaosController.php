@@ -1,8 +1,25 @@
 <?php 
 
 Class PremiacaosController extends AppController {
+
+    public function isAuthorized($user) 
+    {
+        if (parent::isAuthorized($user)) {
+            if ($this->action === 'add') {
+                // Todos os usuários registrados podem criar posts
+                return true;
+            }
+            if (in_array($this->action, array('edit', 'delete'))) {
+                $id = (int) $this->request->params['pass'][0];
+
+                return $this->Premiacao->isOwnedBy($id, $user['id']);
+            }
+        }
+        return false;
+    }
 	
-	public function add() {
+	public function admin_add() 
+    {
 		if ($this->request->is('post')) {
             $this->Premiacao->create();
 
@@ -71,4 +88,37 @@ Class PremiacaosController extends AppController {
             }
         }
 	}
+
+    public function admin_edit($id = null)
+    {
+        $this->Premiacao->id = $id;
+        if ($this->request->is('get')) {
+            $this->request->data = $this->Premiacao->findById($id);
+        } else {
+            
+            if ($this->Premiacao->save($this->request->data)) {
+                $this->Flash->success('Your post has been updated.');
+                $this->redirect(array('action' => 'index'));
+            }
+        }
+    }
+
+    public function admin_index() 
+    {
+        parent::isAuthorized($this->Auth->user());
+
+        $this->Premiacao->recursive = 0;
+        $options = array(
+            'conditions' => array('Premiacao.user_id' => $this->Auth->user('id')),
+            'order' => array('Premiacao.created' => 'DESC'),
+            'limit' => 10,
+            'group' => 'User.id'
+        );
+
+        $this->paginate = $options;
+        // Roda a consulta, já trazendo os resultados paginados
+        $users = $this->paginate('Premiacao');
+        // Envia os dados pra view
+        $this->set('premiacaos', $users);
+    }
 }

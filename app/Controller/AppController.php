@@ -39,7 +39,7 @@ class AppController extends Controller {
     public $components = array(
         'Flash',
         'Auth' => array(
-            'loginRedirect' => array('controller' => 'pages', 'action' => 'display', 'home'),
+            'loginRedirect' => array('admin' => true, 'controller' => 'pages', 'action' => 'display', 'home'),
             'logoutRedirect' => array('controller' => 'users', 'action' => 'login'),
             'authorize' => array('Controller') // Adicionamos essa linha
         )
