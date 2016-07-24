@@ -2,20 +2,34 @@
 
 Class AtividadesController extends AppController {
 
+	//function beforeFilter() {
+        //$this->Auth->allow('index', 'view');
+    //}    
+
 	public function isAuthorized($user) {
-        if (parent::isAuthorized($user)) {
-            //if ($this->action === 'add') {
-                // Todos os usuários registrados podem criar posts
-            //    return true;
+        //if (parent::isAuthorized($user)) {
+
+        	// verifica a action e se existe dentro da regra
+            if (in_array($this->action, array('edit', 'delete', 'desativar', 'add', 'responder', 'index'))) {
+            	// verifica se é admin ou professor
+            	if (!empty($user)) {
+	            	if ($user['role'] == 'admin' || $user['role'] == 'prof') {
+	            		if (!empty($this->request->params['pass'])) {
+		            		$id = (int) $this->request->params['pass'][0];
+		            		// verifica se o admin é o responsável pela atividade
+		                	return $this->Atividade->isOwnedBy($id, $user['id']);
+		                }
+	                // se não for admin ou professor, monta um array com actions disponíveis para alunos	
+	            	} else if (in_array($this->action, array('responder'))) {
+	            		return true;
+	            	// se a url não existir
+	            	} else {
+	            		return false;
+	            	}
+	            } else {
+	            	$this->redirect(array('controller' => 'users', 'action' => 'login'));
+	            }
             //}
-            if (in_array($this->action, array('edit', 'delete', 'desativar', 'add'))) {
-            	if ($user['role'] == 'admin' || $user['role'] == 'prof') {
-            		$id = (int) $this->request->params['pass'][0];
-                	return $this->Atividade->isOwnedBy($id, $user['id']);
-            	} else {
-            		return false;
-            	}
-            }
         }
         return false;
     }
