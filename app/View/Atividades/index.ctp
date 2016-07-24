@@ -61,7 +61,7 @@
 								<td>
 									<a href="<?php echo $this->Html->url(array('controller' => 'atividades', 'action' => 'edit', $atividade['Atividade']['id'])) ?>" class="btn btn-primary">Editar</a>
 
-									<a href="<?php echo $this->Html->url(array('controller' => 'atividades', 'action' => 'desativar', $atividade['Atividade']['id'])) ?>" class="btn btn-default">Desativar</a>
+									<a href="<?php echo $this->Html->url(array('controller' => 'atividades', 'action' => 'desativar', $atividade['Atividade']['id'])) ?>" class="btn btn-default"><?php if ($atividade['Atividade']['ativo'] == '2') { echo "Ativar"; } else { echo "Desativar"; } ?></a>
 
 									<a href="<?php echo $this->Html->url(array('controller' => 'atividades', 'action' => 'delete', $atividade['Atividade']['id'])) ?>" class="btn btn-danger">Excluir</a>
 								</td>

@@ -4,7 +4,7 @@ echo $this->Session->flash('bad');
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -122,9 +122,6 @@ echo $this->Session->flash('bad');
 
 										<li><a><i class="fa fa-pencil"></i> Atividades <span class="fa fa-chevron-down"></span></a>
 											<ul class="nav child_menu" style="display: none">
-												<li>
-													<?php echo $this->Html->link('Pesquisar', array('controller' => 'atividades', 'action' => 'index')); ?>
-												</li>
 												<li>
 													<?php echo $this->Html->link('Gerenciar', array('controller' => 'atividades', 'action' => 'index')); ?>
 												</li>

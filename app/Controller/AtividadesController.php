@@ -4,20 +4,24 @@ Class AtividadesController extends AppController {
 
 	public function isAuthorized($user) {
         if (parent::isAuthorized($user)) {
-            if ($this->action === 'add') {
+            //if ($this->action === 'add') {
                 // Todos os usuários registrados podem criar posts
-                return true;
-            }
-            if (in_array($this->action, array('edit', 'delete'))) {
-                $id = (int) $this->request->params['pass'][0];
-
-                return $this->Atividade->isOwnedBy($id, $user['id']);
+            //    return true;
+            //}
+            if (in_array($this->action, array('edit', 'delete', 'desativar', 'add'))) {
+            	if ($user['role'] == 'admin' || $user['role'] == 'prof') {
+            		$id = (int) $this->request->params['pass'][0];
+                	return $this->Atividade->isOwnedBy($id, $user['id']);
+            	} else {
+            		return false;
+            	}
             }
         }
         return false;
     }
 	
-	public function add() {
+	public function add() 
+	{
 
 		$this->loadModel('Premiacao');
 		$user = $this->Auth->user();
@@ -139,29 +143,77 @@ Class AtividadesController extends AppController {
 
 	public function edit($id = null)
 	{
+		$this->Atividade->id = $id;
+	    if ($this->request->is('get')) {
+	    	$this->Atividade->recursive = 2;
+	        $this->request->data = $this->Atividade->findById($id);
 
-		if ($this->Atividade->isOwnedBy($id, $this->Auth->user('id'))) {
-			die('eae');
-			$this->set('atividade', $atividade);
+	        $this->loadModel('Alternativa');
+	        
+	        $user = $this->Auth->user();
+			$premios = $this->Atividade->Premiacao->find('list', array(
+	    		'conditions' => array('Premiacao.user_id =' => $user['id']),
+	    		'fields'     => array('Premiacao.id', 'Premiacao.titulo')
+	    	));	        
+	        $this->set('premios', $premios);
 
-			if ($this->request->is('post')) {
+	        $this->request->data['Alternativa'] = $this->Atividade->Alternativa->find('all', array('conditions' => array('Alternativa.atividade_id' => $id)));
 
-			}
-		} else {
-			$this->Flash->setFlash('Essa atividade não pertênce à você!');
-		}
-	    
+	        $this->set('tipoAtividade', $this->request->data['Atividade']['tipo_atividade']);
+	    } else {
+	        if ($this->Atividade->save($this->request->data)) {
+	            $this->Flash->success('Atividade salva com sucesso.');
+	            $this->redirect(array('action' => 'index'));
+	        }
+	    }
+		
 	}
 
-	//edit
-	
+	public function delete($id = null)
+	{
+    	if ($this->Atividade->isOwnedBy($id, $this->Auth->user('id'))) {
 
-	public function index() {
+    		$this->Atividade->id = $id;
+    		if (!$this->Atividade->delete()) {
+    			$this->Flash->error(__('Atividade não deletada.'));
+		        $this->redirect(array('action' => 'index'));
+		    } else {
+		    	$this->Flash->success(__('Atividade Deletada.'));
+        		$this->redirect(array('action' => 'index'));
+		    }
+    	} else {
+    		$this->Flash->error(__('Essa atividade não pertênce à você!'));
+    	}
+	}
+
+	public function desativar($id = null)
+	{
+    	if ($this->Atividade->isOwnedBy($id, $this->Auth->user('id'))) {
+
+    		$ativ = $this->Atividade->find('first', array('conditions' => array('atividade_id' => $id)));
+    		$this->Atividade->id = $id;
+    		
+    		if ($ativ['Atividade']['ativo'] == "2") {
+    			$this->request->data['Atividade']['ativo'] = "1";
+    		} else {
+    			$this->request->data['Atividade']['ativo'] = "2";
+    		}
+    		if (!$this->Atividade->save($this->request->data)) {
+    			$this->Flash->success(__('Atividade atualizada.'));
+		        $this->redirect(array('action' => 'index'));
+		    } else {
+		    	$this->Flash->success(__('Atividade Deletada.'));
+        		$this->redirect(array('action' => 'index'));
+		    }
+    	} else {
+    		$this->Flash->error(__('Essa atividade não pertênce à você!'));
+    	}
+	}	
+
+	public function index() 
+	{
 
 		$ativ = $this->Atividade->find('first');
-
-        
-		//$atividades = $this->Atividade->find('all', array('conditions' => array('Atividade.user_id' == $this->Auth->user('id'))));
 
         $options = array('conditions' => array('Atividade.user_id' == $this->Auth->user('id')),
         	'order' => array('Atividade.created' => 'DESC'),
