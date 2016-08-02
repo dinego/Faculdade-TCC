@@ -187,4 +187,41 @@ Class PremiacaosController extends AppController {
         // Envia os dados pra view
         $this->set('premiacaos', $users);
     }
+
+    public function desativar($id = null) {
+
+        parent::isAuthorized($this->Auth->user());
+        
+        $this->Premiacao->id = $id;
+        $premiacao = $this->Premiacao->findById($id);
+
+        if ($premiacao['Premiacao']['status'] == '1') {
+            //inativo
+            $this->request->data['Premiacao']['status'] = '2';
+        } else {
+            //ativo
+            $this->request->data['Premiacao']['status'] = '1';
+        }
+        if ($this->Premiacao->save($this->request->data)) {
+            $this->Flash->success(__('Premiação alterada com sucesso'));
+            $this->redirect(array('action' => 'index'));
+        }
+    }
+
+    public function excluir($id = null) {
+
+        parent::isAuthorized($this->Auth->user());
+
+        $this->Premiacao->id = $id;
+        $premiacao = $this->Premiacao->findById($id);
+
+        if ($premiacao['Premiacao']['status'] == '1') {
+            //excluida
+            $this->request->data['Premiacao']['status'] = '3';
+        } 
+        if ($this->Premiacao->save($this->request->data)) {
+            $this->Flash->success(__('Premiação alterada com sucesso'));
+            $this->redirect(array('action' => 'index'));
+        }
+    }
 }

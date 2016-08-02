@@ -51,7 +51,7 @@
 
 									<a href="<?php echo $this->Html->url(array('controller' => 'premiacaos', 'action' => 'desativar', $premiacao['Premiacao']['id'])) ?>" class="btn btn-default">Desativar</a>
 
-									<a href="<?php echo $this->Html->url(array('controller' => 'premiacaos', 'action' => 'delete', $premiacao['Premiacao']['id'])) ?>" class="btn btn-danger">Excluir</a>
+									<a href="<?php echo $this->Html->url(array('controller' => 'premiacaos', 'action' => 'excluir', $premiacao['Premiacao']['id'])) ?>" class="btn btn-danger">Excluir</a>
 								</td>
 							</tr>
 						<?php } ?>
