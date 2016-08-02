@@ -4,7 +4,7 @@ echo $this->Session->flash('bad');
 ?>
 
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="en">
 
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -123,6 +123,9 @@ echo $this->Session->flash('bad');
 										<li><a><i class="fa fa-pencil"></i> Atividades <span class="fa fa-chevron-down"></span></a>
 											<ul class="nav child_menu" style="display: none">
 												<li>
+													<?php echo $this->Html->link('Pesquisar', array('controller' => 'atividades', 'action' => 'index')); ?>
+												</li>
+												<li>
 													<?php echo $this->Html->link('Gerenciar', array('controller' => 'atividades', 'action' => 'index')); ?>
 												</li>
 												<li>
@@ -134,10 +137,10 @@ echo $this->Session->flash('bad');
 										<li><a><i class="fa fa-star"></i> Premiações <span class="fa fa-chevron-down"></span></a>
 											<ul class="nav child_menu" style="display: none">
 												<li>
-													<?php echo $this->Html->link('Gerenciar', array('admin' => true, 'controller' => 'premiacaos', 'action' => 'index')); ?>
+													<?php echo $this->Html->link('Gerenciar', array('controller' => 'premiacaos', 'action' => 'index')); ?>
 												</li>
 												<li>
-													<?php echo $this->Html->link('Adicionar premiação', array('admin' => true, 'controller' => 'premiacaos', 'action' => 'add')); ?>
+													<?php echo $this->Html->link('Adicionar premiação', array('controller' => 'premiacaos', 'action' => 'add')); ?>
 												</li>
 											</ul>
 										</li>

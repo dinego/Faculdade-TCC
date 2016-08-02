@@ -2,40 +2,22 @@
 
 Class AtividadesController extends AppController {
 
-	//function beforeFilter() {
-        //$this->Auth->allow('index', 'view');
-    //}    
-
 	public function isAuthorized($user) {
-        //if (parent::isAuthorized($user)) {
+        if (parent::isAuthorized($user)) {
+            if ($this->action === 'add') {
+                // Todos os usuários registrados podem criar posts
+                return true;
+            }
+            if (in_array($this->action, array('edit', 'delete'))) {
+                $id = (int) $this->request->params['pass'][0];
 
-        	// verifica a action e se existe dentro da regra
-            if (in_array($this->action, array('edit', 'delete', 'desativar', 'add', 'responder', 'index'))) {
-            	// verifica se é admin ou professor
-            	if (!empty($user)) {
-	            	if ($user['role'] == 'admin' || $user['role'] == 'prof') {
-	            		if (!empty($this->request->params['pass'])) {
-		            		$id = (int) $this->request->params['pass'][0];
-		            		// verifica se o admin é o responsável pela atividade
-		                	return $this->Atividade->isOwnedBy($id, $user['id']);
-		                }
-	                // se não for admin ou professor, monta um array com actions disponíveis para alunos	
-	            	} else if (in_array($this->action, array('responder'))) {
-	            		return true;
-	            	// se a url não existir
-	            	} else {
-	            		return false;
-	            	}
-	            } else {
-	            	$this->redirect(array('controller' => 'users', 'action' => 'login'));
-	            }
-            //}
+                return $this->Atividade->isOwnedBy($id, $user['id']);
+            }
         }
         return false;
     }
 	
-	public function add() 
-	{
+	public function add() {
 
 		$this->loadModel('Premiacao');
 		$user = $this->Auth->user();
@@ -157,77 +139,29 @@ Class AtividadesController extends AppController {
 
 	public function edit($id = null)
 	{
-		$this->Atividade->id = $id;
-	    if ($this->request->is('get')) {
-	    	$this->Atividade->recursive = 2;
-	        $this->request->data = $this->Atividade->findById($id);
 
-	        $this->loadModel('Alternativa');
-	        
-	        $user = $this->Auth->user();
-			$premios = $this->Atividade->Premiacao->find('list', array(
-	    		'conditions' => array('Premiacao.user_id =' => $user['id']),
-	    		'fields'     => array('Premiacao.id', 'Premiacao.titulo')
-	    	));	        
-	        $this->set('premios', $premios);
+		if ($this->Atividade->isOwnedBy($id, $this->Auth->user('id'))) {
+			die('eae');
+			$this->set('atividade', $atividade);
 
-	        $this->request->data['Alternativa'] = $this->Atividade->Alternativa->find('all', array('conditions' => array('Alternativa.atividade_id' => $id)));
+			if ($this->request->is('post')) {
 
-	        $this->set('tipoAtividade', $this->request->data['Atividade']['tipo_atividade']);
-	    } else {
-	        if ($this->Atividade->save($this->request->data)) {
-	            $this->Flash->success('Atividade salva com sucesso.');
-	            $this->redirect(array('action' => 'index'));
-	        }
-	    }
-		
+			}
+		} else {
+			$this->Flash->setFlash('Essa atividade não pertênce à você!');
+		}
+	    
 	}
 
-	public function delete($id = null)
-	{
-    	if ($this->Atividade->isOwnedBy($id, $this->Auth->user('id'))) {
+	//edit
+	
 
-    		$this->Atividade->id = $id;
-    		if (!$this->Atividade->delete()) {
-    			$this->Flash->error(__('Atividade não deletada.'));
-		        $this->redirect(array('action' => 'index'));
-		    } else {
-		    	$this->Flash->success(__('Atividade Deletada.'));
-        		$this->redirect(array('action' => 'index'));
-		    }
-    	} else {
-    		$this->Flash->error(__('Essa atividade não pertênce à você!'));
-    	}
-	}
-
-	public function desativar($id = null)
-	{
-    	if ($this->Atividade->isOwnedBy($id, $this->Auth->user('id'))) {
-
-    		$ativ = $this->Atividade->find('first', array('conditions' => array('atividade_id' => $id)));
-    		$this->Atividade->id = $id;
-    		
-    		if ($ativ['Atividade']['ativo'] == "2") {
-    			$this->request->data['Atividade']['ativo'] = "1";
-    		} else {
-    			$this->request->data['Atividade']['ativo'] = "2";
-    		}
-    		if (!$this->Atividade->save($this->request->data)) {
-    			$this->Flash->success(__('Atividade atualizada.'));
-		        $this->redirect(array('action' => 'index'));
-		    } else {
-		    	$this->Flash->success(__('Atividade Deletada.'));
-        		$this->redirect(array('action' => 'index'));
-		    }
-    	} else {
-    		$this->Flash->error(__('Essa atividade não pertênce à você!'));
-    	}
-	}	
-
-	public function index() 
-	{
+	public function index() {
 
 		$ativ = $this->Atividade->find('first');
+
+        
+		//$atividades = $this->Atividade->find('all', array('conditions' => array('Atividade.user_id' == $this->Auth->user('id'))));
 
         $options = array('conditions' => array('Atividade.user_id' == $this->Auth->user('id')),
         	'order' => array('Atividade.created' => 'DESC'),
