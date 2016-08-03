@@ -100,22 +100,26 @@ echo $this->Session->flash('bad');
 							<div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
 
 								<div class="menu_section">
-									<h3>
-										<i class="fa fa-star"></i>
-										<i class="fa fa-star"></i>
-										<i class="fa fa-star"></i>
-										<i class="fa fa-star"></i>
-										<i class="fa fa-star"></i>
-									</h3>
 									<ul class="nav side-menu">
 
-										<li><a><i class="fa fa-users"></i> Usuários <span class="fa fa-chevron-down"></span></a>
+										<li><a><i class="fa fa-user"></i> Usuários <span class="fa fa-chevron-down"></span></a>
 											<ul class="nav child_menu" style="display: none">
 												<li>
 													<?php echo $this->Html->link('Gerenciar', array('controller' => 'users', 'action' => 'index')); ?>
 												</li>
 												<li>
 													<?php echo $this->Html->link('Adicionar', array('controller' => 'users', 'action' => 'add')); ?>
+												</li>
+											</ul>
+										</li>
+
+										<li><a><i class="fa fa-users"></i> Grupos <span class="fa fa-chevron-down"></span></a>
+											<ul class="nav child_menu" style="display: none">
+												<li>
+													<?php echo $this->Html->link('Gerenciar', array('controller' => 'grupos', 'action' => 'index')); ?>
+												</li>
+												<li>
+													<?php echo $this->Html->link('Adicionar', array('controller' => 'grupos', 'action' => 'add')); ?>
 												</li>
 											</ul>
 										</li>

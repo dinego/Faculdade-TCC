@@ -3,8 +3,8 @@
 // app/Model/User.php
 class Premiacao extends AppModel {
 
-	public function isOwnedBy($atividade, $user) {
-        return $this->field('id', array('id' => $atividade, 'user_id' => $user)) == $atividade;
+	public function isOwnedBy($premiacao, $user) {
+        return $this->field('id', array('id' => $premiacao, 'user_id' => $user)) == $premiacao;
     }
 
     public $name = 'Premiacao';

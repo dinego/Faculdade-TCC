@@ -1,4 +1,30 @@
 <script src="//cdn.ckeditor.com/4.5.7/standard/ckeditor.js"></script>
+<script>
+	function addSelected(){
+		return !$('#todos option:selected').remove().appendTo('#gruposAcesso');
+	}
+	function addTodos(){
+		return !$('#todos option').remove().appendTo('#gruposAcesso');
+	}
+	function removeSelected(){
+		return !$('#gruposAcesso option:selected').remove().appendTo('#todos');
+	}
+	function removeTodos(){
+		return !$('#gruposAcesso option').remove().appendTo('#todos');
+	}
+	function addCSelected(){
+		return !$('#cfops option:selected').remove().appendTo('#ignorar');
+	}
+	function addCTodos(){
+		return !$('#cfops option').remove().appendTo('#ignorar');
+	}
+	function removeCSelected(){
+		return !$('#ignorar option:selected').remove().appendTo('#cfops');
+	}
+	function removeCTodos(){
+		return !$('#ignorar option').remove().appendTo('#cfops');
+	}
+</script>
 <div class="">
 	<div class="page-title">
 		<div class="title_left">
@@ -25,7 +51,7 @@
 				</div>
 				<div class="x_content">
 					<br />
-					<?php echo $this->Form->create('Atividade', array("data-parsley-validate" => null, "class" => "form-horizontal form-label-left", "enctype" => "multipart/form-data")); ?>
+					<?php echo $this->Form->create('Atividade', array("data-parsley-validate" => null, "class" => "form-horizontal form-label-left", "enctype" => "multipart/form-data", 'onSubmit' => "$('#gruposAcesso option').prop('selected', 'selected');")); ?>
 
 
 						<div class="form-group">
@@ -94,6 +120,27 @@
 						<div id="alternativas">
 						
 						</div>
+
+						<hr />
+
+						<div class="col-md-4 form-group">
+							<select id="todos" multiple size="10" class="form-control">
+								<?php
+									$i = 0;
+									foreach ($grupos as $group) {
+										$i++;
+								?>
+									<option value="<?php echo $group['Grupo']['id'] ?>"><?php echo $i.' - '.$group['Grupo']['nome'] ?></option>
+								<?php } ?>
+							</select>
+						</div>
+						<div class="col-md-3 form-group">
+								<button class="btn form-control" onClick="addSelected(); return false;">Adicionar >></button>
+								<button class="btn form-control" onClick="addTodos(); return false;">Adicionar Todos >></button>
+								<button class="btn form-control" onClick="removeSelected(); return false;">Remover <<</button>
+								<button class="btn form-control" onClick="removeTodos(); return false;">Remover Todos <<</button>
+						</div>
+						<?php echo $this->Form->input('grupos', array('id' => 'gruposAcesso','type' => 'select', 'multiple' => true, 'size' => '10', 'options' => '', 'label' => '', 'class' => 'form-control', 'div' => array('class' => 'form-group col-md-4'))); ?>
 
 
 						<!--<div class="form-group">

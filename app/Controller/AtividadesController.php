@@ -4,11 +4,7 @@ Class AtividadesController extends AppController {
 
 	public function isAuthorized($user) {
         if (parent::isAuthorized($user)) {
-            if ($this->action === 'add') {
-                // Todos os usuários registrados podem criar posts
-                return true;
-            }
-            if (in_array($this->action, array('edit', 'delete'))) {
+            if (in_array($this->action, array('edit', 'delete', 'add', 'desativar'))) {
                 $id = (int) $this->request->params['pass'][0];
 
                 return $this->Atividade->isOwnedBy($id, $user['id']);
@@ -19,6 +15,7 @@ Class AtividadesController extends AppController {
 	
 	public function add() {
 
+    	$this->recursive = 2;
 		$this->loadModel('Premiacao');
 		$user = $this->Auth->user();
 		$premios = $this->Premiacao->find('list', array(
@@ -26,9 +23,14 @@ Class AtividadesController extends AppController {
     		'fields'     => array('Premiacao.id', 'Premiacao.titulo')
     	));
 
-    	$this->recursive = 2;
-
 		$this->set(compact('premios', $premios));
+
+		$this->loadModel('Grupo');
+		$grupos = $this->Grupo->find('all', array(
+    		'conditions' => array('Grupo.user_id =' => $user['id']),
+    		'fields'     => array('Grupo.id', 'Grupo.nome')
+    	));
+		$this->set('grupos', $grupos);
 
 		if ($this->request->is('post')) {
 
@@ -49,8 +51,7 @@ Class AtividadesController extends AppController {
 
 
 			$this->request->data['Atividade']['inicio'] = date('Y-m-d', strtotime($dateInicio));
-			$this->request->data['Atividade']['fim'] = date('Y-m-d', strtotime($dateFim));
-	
+			$this->request->data['Atividade']['fim'] = date('Y-m-d', strtotime($dateFim));	
 
 			if (!empty($this->request->data['Atividade']['arquivo'])) {
 				if ($this->request->data['Atividade']['arquivo']['error'] != 4) {
@@ -120,6 +121,14 @@ Class AtividadesController extends AppController {
 		                move_uploaded_file($arquivo['tmp_name'], $_UP['pasta'] . $nome_final);
 		            }
 
+		            $this->loadModel('AcessoAtividade');
+					foreach ($this->request->data["Atividade"]["grupos"] as $key => $grupo) {
+						$this->AcessoAtividade->create();
+						$this->request->data['AcessoAtividade']['grupo_id'] = $grupo;
+						$this->request->data['AcessoAtividade']['atividade_id'] = $this->Atividade->id;
+						$this->AcessoAtividade->save($this->request->data);
+					}
+
 	                $this->Flash->success(__('Atividade salva com Sucesso'));
 	                $this->redirect(array('action' => 'index'));
 	            } else {
@@ -128,6 +137,16 @@ Class AtividadesController extends AppController {
 	        } else {
 	        	$this->request->data['Atividade']['arquivo'] = '';
 	        	if ($this->Atividade->saveAll($this->request->data)) {
+
+	        		
+					$this->loadModel('AcessoAtividade');
+					foreach ($this->request->data["Atividade"]["grupos"] as $key => $grupo) {
+						$this->AcessoAtividade->create();
+						$this->request->data['AcessoAtividade']['grupo_id'] = $grupo;
+						$this->request->data['AcessoAtividade']['atividade_id'] = $this->Atividade->id;
+						$this->AcessoAtividade->save($this->request->data);
+					}
+
 	        		$this->Flash->success(__('Atividade salva com Sucesso'));
 	                $this->redirect(array('action' => 'index'));
 	            } else {
@@ -137,12 +156,25 @@ Class AtividadesController extends AppController {
 		}
 	}
 
+	public function delete($id = null)
+	{
+		if ($this->Atividade->isOwnedBy($id, $this->Auth->user('id'))) {
+			$this->Atividade->id = $id;
+			if($this->Atividade->delete()) {
+				$this->Flash->success(__('Atividade removida com Sucesso'));
+				$this->redirect(array('controller' => 'atividades', 'action' => 'index'));
+			}
+		} else {
+			$this->Flash->setFlash('Essa atividade não pertênce à você!');
+		}
+	}
+
 	public function edit($id = null)
 	{
 
 		if ($this->Atividade->isOwnedBy($id, $this->Auth->user('id'))) {
-			die('eae');
-			$this->set('atividade', $atividade);
+			
+			$this->set('atividade', $this->Atividade->findById($id));
 
 			if ($this->request->is('post')) {
 

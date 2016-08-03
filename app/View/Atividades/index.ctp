@@ -45,17 +45,19 @@
 									<?php echo $atividade['Atividade']['titulo']; ?>
 								</td>
 								<td>
-									<?php echo '<img src="' . $this->webroot . 'fotos/' . $atividade['User']['id'] . '/premios/' . $atividade['Premiacao']['id'] . '/' . $atividade['Premiacao']['foto_premio'] . '"	 class="img-circle" height="35">'; ?>
+									<?php 
+									echo '<img src="' . $this->webroot . 'fotos/' . $atividade['User']['id'] . '/premios/' . $atividade['Premiacao']['id'] . '/' . $atividade['Premiacao']['foto_premio'] . '"	 class="img-circle" height="35">'; ?>
 								</td>
 								<td>
 									<?php echo $atividade['Premiacao']['titulo']; ?>
 								</td>
 								<td>
-									<?php echo $atividade['Premiacao']['pontos']; ?>
+									<?php echo $atividade['Premiacao']['pontos_final']; ?>
 								</td>
 								<td>
 									<?php 
 										$criado = date("d/m/Y H:m:s", strtotime($atividade['Atividade']['created']));
+										echo $criado;
 									?>
 								</td>
 								<td>

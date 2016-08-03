@@ -4,7 +4,13 @@ class Atividade extends AppModel {
     public $name = 'Atividade';
 
     public function isOwnedBy($atividade, $user) {
-        return $this->field('id', array('id' => $atividade, 'user_id' => $user)) === $atividade;
+        $userS = $this->User->findById($user);
+        if ($userS['User']['role'] == "admin") {
+            return true;
+        } else {
+            return $this->field('id', array('id' => $atividade, 'user_id' => $user)) == $atividade;
+        }
+        
     }
 
     public $hasOne = array(
@@ -28,6 +34,10 @@ class Atividade extends AppModel {
     public $hasMany = array(
         'Alternativa' => array(
             'className' => 'Alternativa',
+            'foreignKey' => 'atividade_id'
+            ),
+        'AcessoAtividade' => array(
+            'className' => 'AcessoAtividade',
             'foreignKey' => 'atividade_id'
             )
         );
