@@ -1,3 +1,4 @@
+
 <script src="//cdn.ckeditor.com/4.5.7/standard/ckeditor.js"></script>
 <script>
 	function addSelected(){
@@ -51,7 +52,7 @@
 				</div>
 				<div class="x_content">
 					<br />
-					<?php echo $this->Form->create('Grupo', array("data-parsley-validate" => null, "class" => "form-horizontal form-label-left", "enctype" => "multipart/form-data", 'onSubmit' => "$('#grupos option').prop('selected', 'selected');")); ?>
+					<?php echo $this->Form->create('Grupo', array("data-parsley-validate" => null, "class" => "form-horizontal form-label-left", "enctype" => "multipart/form-data", 'onSubmit' => "$('#gruposAcesso option').prop('selected', 'selected');")); ?>
 
 
 						<div class="form-group">
@@ -80,7 +81,7 @@
 									foreach ($alunos as $aluno) {
 										$i++;
 								?>
-									<option value="<?php echo $aluno['User']['id'] ?>"><?php echo $i.' - '.$alunos['User']['nome'] ?></option>
+									<option value="<?php echo $aluno['User']['id'] ?>"><?php echo $i.' - '.$aluno['User']['nome'] ?></option>
 								<?php } ?>
 							</select>
 						</div>

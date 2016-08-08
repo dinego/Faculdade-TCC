@@ -5,7 +5,7 @@ class UsersController extends AppController {
 
     public function beforeFilter() {
         parent::beforeFilter();
-        $this->Auth->allow('add', 'logout');
+        $this->Auth->allow('cadastro', 'logout');
     }
 
 
@@ -48,9 +48,59 @@ class UsersController extends AppController {
         $this->set('users', $users);
     }
 
+    public function cadastro() {
+        if ($this->request->is('post')) {
+            $this->request->data['User']['liberado'] = 0;
+            if ($this->User->save($this->request->data)) {
+                $this->Flash->success(__('Solicitação feita! Aguarde até algum professor liberar seu acesso!'));
+                $this->redirect(array('action' => 'login'));
+            } else {
+                $this->Flash->error(__('Usuário não cadastrado. Tente novamente mais tarde.'));
+            }
+        }
+    }
+
+    public function liberar()
+    {
+
+        parent::isAuthorized($this->Auth->user());
+
+        $this->User->recursive = 0;
+        $options = array(
+            'conditions' => array('User.active' => 'true', 'User.liberado' => '0'),
+            'order' => array('User.created' => 'DESC'),
+            'limit' => 10,
+            'group' => 'User.id'
+        );
+
+        $this->paginate = $options;
+        // Roda a consulta, já trazendo os resultados paginados
+        $users = $this->paginate('User');
+        // Envia os dados pra view
+        $this->set('users', $users);
+    }
+
+    public function liberarChange($id = null) 
+    {
+        parent::isAuthorized($this->Auth->user());
+        
+        if ($this->request->is('get')) {
+            $this->request->data['User']['id'] = $id;
+            $this->request->data['User']['liberado'] = 1;
+
+            if ($this->User->save($this->request->data))
+            {
+                $this->Flash->success(__('Usuário Liberado com sucesso!'));
+                $this->redirect(array('action' => 'liberar'));
+            } else {
+                $this->Flash->error(__('Usuário não liberado. Tente novamente mais tarde.'));
+            }
+        }
+    }
     
 
-    public function add() {
+    public function add() 
+    {
         if ($this->request->is('post')) {
             $this->User->create();            
             // Tamanho máximo do arquivo (em Bytes)
@@ -112,7 +162,10 @@ class UsersController extends AppController {
         }
     }
 
-    public function edit($id = null) {
+    public function edit($id = null) 
+    {
+        parent::isAuthorized($this->Auth->user());
+
         $this->User->id = $id;
         if (!$this->User->exists()) {
             throw new NotFoundException(__('Invalid user'));
@@ -131,18 +184,16 @@ class UsersController extends AppController {
     }
 
     public function delete($id = null) {
-        if (!$this->request->is('post')) {
-            throw new MethodNotAllowedException();
-        }
+        parent::isAuthorized($this->Auth->user());
         $this->User->id = $id;
         if (!$this->User->exists()) {
-            throw new NotFoundException(__('Invalid user'));
+            throw new NotFoundException(__('Usuário inválido'));
         }
         if ($this->User->delete()) {
-            $this->Flash->success(__('User deleted'));
+            $this->Flash->success(__('Usuário deletado com sucesso'));
             $this->redirect(array('action' => 'index'));
         }
-        $this->Flash->error(__('User was not deleted'));
+        $this->Flash->error(__('Usuário não deletado.'));
         $this->redirect(array('action' => 'index'));
     }
 }

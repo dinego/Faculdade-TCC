@@ -48,6 +48,9 @@ class AppController extends Controller {
     public function isAuthorized($user) {
         if (!empty($user['role']) && $user['role'] === 'admin' || $user['role'] === 'prof') {
             return true; // Admin pode acessar todas actions
+        } else if (!empty($user['role']) && $user['role'] === 'aluno') {
+            return false;
+            $this->redirect(array('controller' => 'alunos', 'action' => 'index'));
         } else {
             return false;
         }

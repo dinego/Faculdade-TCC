@@ -72,7 +72,7 @@ echo $this->Session->flash('bad');
 						<div class="left_col scroll-view">
 
 							<div class="navbar nav_title" style="border: 0;">
-								<a href="<?php echo $this->Html->url(array('controller' => 'pages', 'action' => 'display', 'home')) ?>" class="site_title"><i class="fa fa-graduation-cap"></i> <span>Estudei!</span></a>
+								<a href="<?php echo $this->Html->url(array('controller' => 'pages', 'action' => 'display', 'home')) ?>" class="site_title"><img src="<?php echo $this->webroot . 'img/logo-eduga.png'; ?>" width="60%"></a>
 							</div>
 							<div class="clearfix"></div>
 
@@ -109,6 +109,9 @@ echo $this->Session->flash('bad');
 												</li>
 												<li>
 													<?php echo $this->Html->link('Adicionar', array('controller' => 'users', 'action' => 'add')); ?>
+												</li>
+												<li>
+													<?php echo $this->Html->link('Liberar Acesso', array('controller' => 'users', 'action' => 'liberar')); ?>
 												</li>
 											</ul>
 										</li>

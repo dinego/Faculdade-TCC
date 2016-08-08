@@ -2,7 +2,7 @@
 <div class="">
 	<div class="page-title">
 		<div class="title_left">
-			<h3>Grupos</h3>
+			<h3>Usuários</h3>
 		</div>
 		<div class="title_right">
 			<div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
@@ -20,7 +20,7 @@
 		<div class="col-md-12 col-sm-12 col-xs-12">
 			<div class="x_panel">
 				<div class="x_title">
-					<h2>Grupos</h2>
+					<h2>Liberar</h2>
 					<div class="clearfix"></div>
 				</div>
 				<div class="x_content">
@@ -29,22 +29,29 @@
 						<thead>
 							<tr>
 								<th>#</th>
-								<th>Titulo</th>
-								<th>Descricao</th>
+								<th>Nome</th>
+								<th>Usuário</th>
+								<th>RA</th>
+								<th>Criado</th>
 								<th>Controle</th>
 							</tr>
 						</thead>
 						<tbody>
-						<?php 
-						foreach ($grupos as $key => $grupo) { ?>
+						<?php foreach ($users as $key => $usr) { ?>
 							<tr>
-								<th scope="row"><?php echo $grupo['Grupo']['id'] ?></th>
-								<td><?php echo $grupo['Grupo']['nome'] ?></td>
-								<td><?php echo $grupo['Grupo']['descricao'] ?></td>
-								<td>
-									<a href="<?php echo $this->Html->url(array('controller' => 'grupos', 'action' => 'edit', $grupo['Grupo']['id'])) ?>" class="btn btn-primary">Editar</a>
+								<th scope="row"><?php echo $usr['User']['id'] ?></th>
+								<td><?php echo $usr['User']['nome'] ?></td>
+								<td><?php echo $usr['User']['username'] ?></td>
+								<td><?php echo $usr['User']['ra'] ?></td>
 
-									<a href="<?php echo $this->Html->url(array('controller' => 'grupos', 'action' => 'excluir', $grupo['Grupo']['id'])) ?>" class="btn btn-danger">Excluir</a>
+								<?php 
+									$criado = date("d/m/Y H:m:s", strtotime($usr['User']['created']));
+								?>
+
+								<td><?php echo $criado ?></td>
+								<td>
+									<a href="<?php echo $this->Html->url(array('controller' => 'users', 'action' => 'liberarChange', $usr['User']['id'])) ?>" class="btn btn-primary">Liberar</a>
+									<a href="<?php echo $this->Html->url(array('controller' => 'users', 'action' => 'delete', $usr['User']['id'])) ?>" class="btn btn-danger">Remover Usuário</a>
 								</td>
 							</tr>
 						<?php } ?>

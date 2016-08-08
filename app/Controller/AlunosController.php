@@ -14,7 +14,7 @@ class AlunosController extends AppController {
 	public function index() {
         $this->layout  = "alunos";
 
-        $this->set('title_for_layout', 'Login');
+        $this->set('title_for_layout', 'Atividades');
 		
 	}
 }
