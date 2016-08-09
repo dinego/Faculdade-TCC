@@ -47,7 +47,7 @@
 		<div class="col-md-12 col-sm-12 col-xs-12">
 			<div class="x_panel">
 				<div class="x_title">
-					<h2>Adicionar Novo Grupo</h2>
+					<h2>Editar Grupo</h2>
 					<div class="clearfix"></div>
 				</div>
 				<div class="x_content">
@@ -59,7 +59,8 @@
 							<label class="control-label col-md-3 col-sm-3 col-xs-12" for="descricao">Nome do Grupo <span class="required">*</span>
 							</label>
 							<div class="col-md-6 col-sm-6 col-xs-12">
-								<?php echo $this->Form->input('Grupo.nome', array("class" => "col-md-6 col-xs-12 form-control", "label" => false)); ?>
+								<?php echo $this->Form->input('nome', array("class" => "col-md-6 col-xs-12 form-control", "label" => false, "value" => $grupoAtual['Grupo']['nome'])); ?>
+								<?php echo $this->Form->input('id', array("type" => "hidden", "value" => $grupoAtual['Grupo']['id'])); ?>
 							</div>
 						</div>
 
@@ -67,7 +68,7 @@
 							<label class="control-label col-md-3 col-sm-3 col-xs-12" for="descricao">Descrição <span class="required">*</span>
 							</label>
 							<div class="col-md-9 col-sm-9 col-xs-12">
-								<?php echo $this->Form->input('Grupo.descricao', array('class' => 'form-control ckeditor', 'id' => 'ckeditor', 'label' => false)) ?>
+								<?php echo $this->Form->input('descricao', array('class' => 'form-control ckeditor', 'id' => 'ckeditor', 'label' => false, "value" => $grupoAtual['Grupo']['descricao'])) ?>
 							</div>
 						</div>
 
@@ -78,10 +79,10 @@
 								<?php
 
 									$i = 0;
-									foreach ($alunos as $aluno) {
+									foreach ($inativos as $aluno) {
 										$i++;
 								?>
-									<option value="<?php echo $aluno['User']['id'] ?>"><?php echo $aluno['User']['ra'].' - '.$aluno['User']['nome'] ?></option>
+									<option value="<?php echo $aluno['User']['id'] ?>"><?php echo $aluno['User']['ra'] . ' - ' . $aluno['User']['nome'] ?></option>
 								<?php } ?>
 							</select>
 						</div>
@@ -91,7 +92,20 @@
 								<button class="btn form-control" onClick="removeSelected(); return false;">Remover <<</button>
 								<button class="btn form-control" onClick="removeTodos(); return false;">Remover Todos <<</button>
 						</div>
-						<?php echo $this->Form->input('alunos', array('id' => 'gruposAcesso','type' => 'select', 'multiple' => true, 'size' => '10', 'options' => '', 'label' => '', 'class' => 'form-control', 'div' => array('class' => 'form-group col-md-4'))); ?>
+						<div class="col-md-4 form-group">
+							<select id="gruposAcesso" name="data[Grupo][alunos][]" multiple size="10" class="form-control">
+								<?php
+
+									$i = 0;
+									foreach ($ativos as $aluno2) {
+										$i++;
+								?>
+									<option value="<?php echo $aluno2['User']['id'] ?>"><?php echo $aluno2['User']['ra'].' - '.$aluno2['User']['nome'] ?></option>
+								<?php } ?>
+							</select>
+						</div>
+
+						<?php //echo $this->Form->input('alunos', array('id' => 'gruposAcesso','type' => 'select', 'multiple' => true, 'size' => '10', 'options' => '', 'label' => '', 'class' => 'form-control', 'div' => array('class' => 'form-group col-md-4'))); ?>
 
 
 						<!--<div class="form-group">

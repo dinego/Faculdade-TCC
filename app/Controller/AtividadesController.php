@@ -5,7 +5,7 @@ Class AtividadesController extends AppController {
 	public function isAuthorized($user) {
         if (parent::isAuthorized($user)) {
             if (in_array($this->action, array('edit', 'delete', 'add', 'desativar'))) {
-                $id = (int) $this->request->params['pass'][0];
+                $id = (int) $this->request->params['pass'];
 
                 return $this->Atividade->isOwnedBy($id, $user['id']);
             }
@@ -13,7 +13,8 @@ Class AtividadesController extends AppController {
         return false;
     }
 	
-	public function add() {
+	public function add() 
+	{
 
     	$this->recursive = 2;
 		$this->loadModel('Premiacao');
@@ -171,6 +172,10 @@ Class AtividadesController extends AppController {
 
 	public function edit($id = null)
 	{
+		$this->Atividade->id = $id;
+		$ativ = $this->Atividade->findById($id);
+
+		$this->set('ativ', $ativ);
 
 		if ($this->Atividade->isOwnedBy($id, $this->Auth->user('id'))) {
 			
@@ -180,18 +185,15 @@ Class AtividadesController extends AppController {
 
 			}
 		} else {
-			$this->Flash->setFlash('Essa atividade não pertênce à você!');
+			$this->Flash->setFlash('Essa atividade não pertênce a você!');
 		}
 	    
-	}
+	}	
 
-	//edit
-	
-
-	public function index() {
+	public function index() 
+	{
 
 		$ativ = $this->Atividade->find('first');
-
         
 		//$atividades = $this->Atividade->find('all', array('conditions' => array('Atividade.user_id' == $this->Auth->user('id'))));
 

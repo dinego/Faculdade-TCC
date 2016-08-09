@@ -130,9 +130,6 @@ echo $this->Session->flash('bad');
 										<li><a><i class="fa fa-pencil"></i> Atividades <span class="fa fa-chevron-down"></span></a>
 											<ul class="nav child_menu" style="display: none">
 												<li>
-													<?php echo $this->Html->link('Pesquisar', array('controller' => 'atividades', 'action' => 'index')); ?>
-												</li>
-												<li>
 													<?php echo $this->Html->link('Gerenciar', array('controller' => 'atividades', 'action' => 'index')); ?>
 												</li>
 												<li>
