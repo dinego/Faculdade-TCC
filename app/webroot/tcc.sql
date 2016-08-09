@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: 03-Ago-2016 às 17:19
+-- Generation Time: 09-Ago-2016 às 16:39
 -- Versão do servidor: 10.1.13-MariaDB
 -- PHP Version: 5.5.37
 
@@ -40,7 +40,8 @@ CREATE TABLE `acessos_atividades` (
 
 INSERT INTO `acessos_atividades` (`id`, `grupo_id`, `atividade_id`, `created`, `modified`) VALUES
 (8, 1, 17, '2016-08-03 16:15:56', '2016-08-03 16:15:56'),
-(9, 2, 17, '2016-08-03 16:15:56', '2016-08-03 16:15:56');
+(9, 2, 17, '2016-08-03 16:15:56', '2016-08-03 16:15:56'),
+(10, 16, 1, '2016-08-09 16:23:01', '2016-08-09 16:23:01');
 
 -- --------------------------------------------------------
 
@@ -104,7 +105,12 @@ INSERT INTO `alternativas` (`id`, `atividade_id`, `alternativa`, `created`, `mod
 (41, 10, '1123', '2016-04-27 14:57:33', '2016-04-27 14:57:33'),
 (42, 10, '12312', '2016-04-27 14:57:33', '2016-04-27 14:57:33'),
 (43, 10, '3123', '2016-04-27 14:57:33', '2016-04-27 14:57:33'),
-(44, 10, '123123', '2016-04-27 14:57:33', '2016-04-27 14:57:33');
+(44, 10, '123123', '2016-04-27 14:57:33', '2016-04-27 14:57:33'),
+(45, 1, 'teste 1', '2016-08-09 16:23:01', '2016-08-09 16:23:01'),
+(46, 1, 'eafsdafsad', '2016-08-09 16:23:01', '2016-08-09 16:23:01'),
+(47, 1, 'fsadfsad', '2016-08-09 16:23:01', '2016-08-09 16:23:01'),
+(48, 1, 'ff', '2016-08-09 16:23:01', '2016-08-09 16:23:01'),
+(49, 1, 'fsadfsdafasdfsad', '2016-08-09 16:23:01', '2016-08-09 16:23:01');
 
 -- --------------------------------------------------------
 
@@ -127,6 +133,13 @@ CREATE TABLE `atividades` (
   `arquivo` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Extraindo dados da tabela `atividades`
+--
+
+INSERT INTO `atividades` (`id`, `titulo`, `descricao`, `user_id`, `premiacaos_id`, `nivel_id`, `tipo_atividade`, `inicio`, `fim`, `created`, `modified`, `arquivo`) VALUES
+(1, 'Teste Diego hehe', '<p>Atividade bolada</p>\r\n', 1, 1, 1, '2', '2016-05-01 00:00:00', '2016-06-01 00:00:00', '2016-08-09 16:23:01', '2016-08-09 16:23:01', 'iis.png');
+
 -- --------------------------------------------------------
 
 --
@@ -147,8 +160,7 @@ CREATE TABLE `grupos` (
 --
 
 INSERT INTO `grupos` (`id`, `nome`, `descricao`, `created`, `modified`, `user_id`) VALUES
-(1, '4000 - Sistema de informação', 'Turma 4000', '2016-04-05 09:45:54', '2016-04-05 09:45:57', 1),
-(2, '2000 - Teste', 'Teste', '2016-04-05 11:19:10', '2016-04-05 11:19:14', 1);
+(16, 'Grupo Teste', '<p>Apenas um teste de Grupo</p>\r\n', '2016-08-04 14:20:44', '2016-08-04 14:20:44', 1);
 
 -- --------------------------------------------------------
 
@@ -193,18 +205,7 @@ CREATE TABLE `respostas_atividades` (
 --
 
 INSERT INTO `respostas_atividades` (`id`, `user_id`, `atividade_id`, `alternativa_id`, `created`, `modified`) VALUES
-(1, 1, 1, 3, '2016-04-05 09:35:12', '2016-04-05 09:35:17'),
-(2, 0, 7, 2, '2016-04-27 14:53:29', '2016-04-27 14:53:29'),
-(3, 0, 8, 1, '2016-04-27 14:55:13', '2016-04-27 14:55:13'),
-(4, 0, 9, 2, '2016-04-27 14:55:59', '2016-04-27 14:55:59'),
-(5, 1, 10, 1, '2016-04-27 14:57:33', '2016-04-27 14:57:33'),
-(6, 1, 11, 0, '2016-08-03 15:45:46', '2016-08-03 15:45:46'),
-(7, 1, 12, 0, '2016-08-03 16:08:41', '2016-08-03 16:08:41'),
-(8, 1, 13, 0, '2016-08-03 16:10:01', '2016-08-03 16:10:01'),
-(9, 1, 14, 0, '2016-08-03 16:14:33', '2016-08-03 16:14:33'),
-(10, 1, 15, 0, '2016-08-03 16:15:01', '2016-08-03 16:15:01'),
-(11, 1, 16, 0, '2016-08-03 16:15:27', '2016-08-03 16:15:27'),
-(12, 1, 17, 0, '2016-08-03 16:15:56', '2016-08-03 16:15:56');
+(13, 1, 1, 1, '2016-08-09 16:23:01', '2016-08-09 16:23:01');
 
 -- --------------------------------------------------------
 
@@ -214,13 +215,15 @@ INSERT INTO `respostas_atividades` (`id`, `user_id`, `atividade_id`, `alternativ
 
 CREATE TABLE `users` (
   `id` int(10) UNSIGNED NOT NULL,
+  `liberado` int(1) NOT NULL,
+  `ra` int(7) NOT NULL,
   `username` varchar(50) DEFAULT NULL,
   `password` varchar(255) DEFAULT NULL,
   `nome` varchar(120) NOT NULL,
   `foto` varchar(255) NOT NULL,
   `pontos` int(11) NOT NULL DEFAULT '0',
   `active` varchar(5) NOT NULL DEFAULT 'true',
-  `role` varchar(20) DEFAULT NULL,
+  `role` varchar(20) DEFAULT 'aluno',
   `created` datetime DEFAULT NULL,
   `modified` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -229,11 +232,13 @@ CREATE TABLE `users` (
 -- Extraindo dados da tabela `users`
 --
 
-INSERT INTO `users` (`id`, `username`, `password`, `nome`, `foto`, `pontos`, `active`, `role`, `created`, `modified`) VALUES
-(1, 'diegorm.ti@gmail.com', '6064333888b65d9c19b0382a21c1fee5273b936b', 'Diego Moreira', '12654287_925868070827657_1367160207912510733_n.jpg', 20000, 'true', 'prof', '2016-03-15 19:43:57', '2016-03-15 19:43:57'),
-(2, 'brenda.sricci@gmail.com', 'aa29cdb48e7bc0f96a8024876b9986891253fb0e', 'Brenda S. Ricci', 'icon.png', 0, 'true', 'prof', '2016-03-28 19:17:25', '2016-03-28 19:17:25'),
-(3, 'testealuno@teste.com', 'teste', 'teste 1', '', 15, 'true', 'aluno', '2016-08-03 00:00:00', '2016-08-03 00:00:00'),
-(6, 'aluno2@teste.com', 'teste', 'aluno 2', '', 3425, 'true', 'aluno', '2016-08-03 00:00:00', '2016-08-03 00:00:00');
+INSERT INTO `users` (`id`, `liberado`, `ra`, `username`, `password`, `nome`, `foto`, `pontos`, `active`, `role`, `created`, `modified`) VALUES
+(1, 1, 123456, 'diegorm.ti@gmail.com', '6064333888b65d9c19b0382a21c1fee5273b936b', 'Diego Moreira', '12654287_925868070827657_1367160207912510733_n.jpg', 20000, 'true', 'admin', '2016-03-15 19:43:57', '2016-03-15 19:43:57'),
+(2, 1, 12333, 'brenda.sricci@gmail.com', 'aa29cdb48e7bc0f96a8024876b9986891253fb0e', 'Brenda S. Ricci', 'icon.png', 0, 'true', 'prof', '2016-03-28 19:17:25', '2016-03-28 19:17:25'),
+(3, 1, 33444, 'testealuno@teste.com', 'teste', 'teste 1', '', 15, 'true', 'aluno', '2016-08-03 00:00:00', '2016-08-03 00:00:00'),
+(6, 1, 34234, 'aluno2@teste.com', 'teste', 'aluno 2', '', 3425, 'true', 'aluno', '2016-08-03 00:00:00', '2016-08-08 15:01:00'),
+(7, 1, 78078, 'teste@teste.com.br', 'a0e5497e321bc9060d56e312ae823a471a450d71', 'Teste Teste', '', 0, 'true', 'aluno', '2016-08-08 14:41:34', '2016-08-08 15:00:57'),
+(9, 1, 333333, 'teste2@teste.com', 'dfasdfsad', 'Diego Teste', '', 222, 'true', 'aluno', '2016-08-09 00:00:00', '2016-08-09 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -254,9 +259,8 @@ CREATE TABLE `users_grupos` (
 --
 
 INSERT INTO `users_grupos` (`id`, `user_id`, `grupo_id`, `created`, `modified`) VALUES
-(1, 1, 1, '2016-04-05 09:46:47', '2016-04-05 09:46:50'),
-(2, 2, 1, '2016-04-05 09:47:11', '2016-04-05 09:47:14'),
-(3, 2, 2, '2016-04-05 11:19:44', '2016-04-05 11:19:47');
+(22, 3, 16, '2016-08-04 14:20:44', '2016-08-04 14:20:44'),
+(23, 6, 16, '2016-08-04 14:20:44', '2016-08-04 14:20:44');
 
 --
 -- Indexes for dumped tables
@@ -318,22 +322,22 @@ ALTER TABLE `users_grupos`
 -- AUTO_INCREMENT for table `acessos_atividades`
 --
 ALTER TABLE `acessos_atividades`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 --
 -- AUTO_INCREMENT for table `alternativas`
 --
 ALTER TABLE `alternativas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
 --
 -- AUTO_INCREMENT for table `atividades`
 --
 ALTER TABLE `atividades`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `grupos`
 --
 ALTER TABLE `grupos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 --
 -- AUTO_INCREMENT for table `premiacaos`
 --
@@ -343,17 +347,17 @@ ALTER TABLE `premiacaos`
 -- AUTO_INCREMENT for table `respostas_atividades`
 --
 ALTER TABLE `respostas_atividades`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 --
 -- AUTO_INCREMENT for table `users_grupos`
 --
 ALTER TABLE `users_grupos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
