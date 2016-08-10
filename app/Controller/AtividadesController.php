@@ -52,7 +52,7 @@ Class AtividadesController extends AppController {
 
 
 			$this->request->data['Atividade']['inicio'] = date('Y-m-d', strtotime($dateInicio));
-			$this->request->data['Atividade']['fim'] = date('Y-m-d', strtotime($dateFim));	
+			$this->request->data['Atividade']['fim'] = date('Y-m-d', strtotime($dateFim));
 
 			if (!empty($this->request->data['Atividade']['arquivo'])) {
 				if ($this->request->data['Atividade']['arquivo']['error'] != 4) {
@@ -108,9 +108,9 @@ Class AtividadesController extends AppController {
 
 	            $this->request->data['Atividade']['user_id'] = $user['id'];
 
-	            $this->request->data['RespostaAtividade']['user_id'] = $user['id'];
-
 	            if ($this->Atividade->saveAll($this->request->data)) {
+	            	//$this->Atividade->Alternativa->find('first', array('conditions' => array('')));
+	                //$this->Atividade->Alternativa->	$this->request->data['RespostaAtividade']['alternativa_id']
 
 	            	if (!empty($this->request->data['Atividade']['arquivo'])) {
 		                $_UP['pasta'] = WWW_ROOT . "fotos/" . $user['id'] . "/atividades/auxiliar/" . $this->Atividade->id . "/";
@@ -173,9 +173,6 @@ Class AtividadesController extends AppController {
 	public function edit($id = null)
 	{
 		$this->Atividade->id = $id;
-		$ativ = $this->Atividade->findById($id);
-
-		$this->set('ativ', $ativ);
 
 		if ($this->Atividade->isOwnedBy($id, $this->Auth->user('id'))) {
 			
@@ -183,7 +180,26 @@ Class AtividadesController extends AppController {
 
 			if ($this->request->is('post')) {
 
+			} else {
+				$this->request->data = $this->Atividade->findById($id);
+
+				$premios = $this->Atividade->Premiacao->find('list', 
+					array('fields' => array(
+						'Premiacao.id', 
+						'Premiacao.titulo'
+						), 
+						'conditions' => array(
+							'user_id' => $this->Auth->user('id')
+							)
+						)
+					);
+				$alternativas = $this->Atividade->Alternativa->find('all', array('conditions' => array('Alternativa.atividade_id' => $id)));
+				$this->set('alternativas', $alternativas);
+
+				$this->set('premios', $premios);
 			}
+
+
 		} else {
 			$this->Flash->setFlash('Essa atividade não pertênce a você!');
 		}

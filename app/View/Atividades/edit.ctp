@@ -83,16 +83,43 @@
 						<script type="text/javascript">
 							$("#AtividadeTipoAtividade").on('change', function (){ 
 								if ($(this).val() == 2) {
-
-									$("#alternativas").html("");
+									$("#alternativas").hide();
 								} else {
-									$("#alternativas").html("<div class=\"ln_solid\"></div><div class=\"form-group\"><label class=\"control-label col-md-3 col-sm-3 col-xs-12\"></label><div class=\"col-md-6 col-sm-6 col-xs-12\">Alternativa</div><div class=\"col-md-2 col-sm-12 col-xs-12\">Resposta Certa</div></div>     <div class=\"form-group\"><label class=\"control-label col-md-3 col-sm-3 col-xs-12\" for=\"descricao\">1</label><div class=\"col-md-6 col-sm-6 col-xs-12\"><div class=\"input text\"><input name=\"data[Alternativa][1][alternativa]\" class=\"col-md-12 col-xs-12 form-control\" maxlength=\"255\" type=\"text\" id=\"Alternativa1Alternativa\"></div></div><div class=\"col-md-1 col-sm-12 col-xs-12\"><input name=\"data[RespostaAtividade][alternativa_id]\" class=\"col-md-12 col-xs-12 form-control\" maxlength=\"1\" type=\"radio\" value=\"1\"></div></div>     <div class=\"form-group\"><label class=\"control-label col-md-3 col-sm-3 col-xs-12\" for=\"descricao\">2</label><div class=\"col-md-6 col-sm-6 col-xs-12\"><div class=\"input text\"><input name=\"data[Alternativa][2][alternativa]\" class=\"col-md-12 col-xs-12 form-control\" maxlength=\"255\" type=\"text\" id=\"Alternativa1Alternativa\"></div></div><div class=\"col-md-1 col-sm-12 col-xs-12\"><div class=\"input text\"><input name=\"data[RespostaAtividade][alternativa_id]\" class=\"col-md-12 col-xs-12 form-control\" maxlength=\"1\" type=\"radio\" value=\"2\"></div></div></div>	<div class=\"form-group\"><label class=\"control-label col-md-3 col-sm-3 col-xs-12\" for=\"descricao\">3</label><div class=\"col-md-6 col-sm-6 col-xs-12\"><div class=\"input text\"><input name=\"data[Alternativa][3][alternativa]\" class=\"col-md-12 col-xs-12 form-control\" maxlength=\"255\" type=\"text\" id=\"Alternativa1Alternativa\"></div></div><div class=\"col-md-1 col-sm-12 col-xs-12\"><div class=\"input text\"><input name=\"data[RespostaAtividade][alternativa_id]\" class=\"col-md-12 col-xs-12 form-control\" maxlength=\"1\" type=\"radio\" value=\"3\"></div></div></div>	<div class=\"form-group\"><label class=\"control-label col-md-3 col-sm-3 col-xs-12\" for=\"descricao\">4</label><div class=\"col-md-6 col-sm-6 col-xs-12\"><div class=\"input text\"><input name=\"data[Alternativa][4][alternativa]\" class=\"col-md-12 col-xs-12 form-control\" maxlength=\"255\" type=\"text\" id=\"Alternativa1Alternativa\"></div></div><div class=\"col-md-1 col-sm-12 col-xs-12\"><div class=\"input text\"><input name=\"data[RespostaAtividade][alternativa_id]\" class=\"col-md-12 col-xs-12 form-control\" maxlength=\"1\" type=\"radio\" value=\"4\"></div></div></div>	<div class=\"form-group\"><label class=\"control-label col-md-3 col-sm-3 col-xs-12\" for=\"descricao\">5</label><div class=\"col-md-6 col-sm-6 col-xs-12\"><div class=\"input text\"><input name=\"data[Alternativa][5][alternativa]\" class=\"col-md-12 col-xs-12 form-control\" maxlength=\"255\" type=\"text\" id=\"Alternativa1Alternativa\"></div></div><div class=\"col-md-1 col-sm-12 col-xs-12\"><div class=\"input text\"><input name=\"data[RespostaAtividade][alternativa_id]\" class=\"col-md-12 col-xs-12 form-control\" maxlength=\"1\" type=\"radio\" value=\"5\"></div></div></div>");
+									$("#alternativas").show();
 								}
 							});
 
 						</script>
 						<div id="alternativas">
-						
+							<div class="ln_solid">
+								
+							</div>
+							<div class="form-group">
+								<label class="control-label col-md-3 col-sm-3 col-xs-12"></label>
+								<div class="col-md-6 col-sm-6 col-xs-12">Alternativas</div>
+								<div class="col-md-2 col-sm-12 col-xs-12">Resposta Certa</div>
+							</div>
+
+							<?php 
+								foreach ($alternativas as $key => $alternativa) {
+							?>
+
+								<div class="form-group">
+									<label class="control-label col-md-3 col-sm-3 col-xs-12" for="descricao"><?php echo $key ?></label>
+									<div class="col-md-6 col-sm-6 col-xs-12">
+										<div class="input text">
+											<input value="<?php echo $alternativa['Alternativa']['alternativa']; ?>" name="data[Alternativa][<?php echo $key; ?>][alternativa]" class="col-md-12 col-xs-12 form-control" maxlength="255" type="text" id="Alternativa<?php echo $key; ?>Alternativa">
+										</div>
+									</div>
+
+									<div class="col-md-1 col-sm-12 col-xs-12">
+										<input name="data[RespostaAtividade][alternativa_id]" class="col-md-12 col-xs-12 form-control" maxlength="1" type="radio" value="<?php echo $key; ?>">
+									</div>
+								</div>
+
+							<?php
+								}
+							?>
 						</div>
 
 

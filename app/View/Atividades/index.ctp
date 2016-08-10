@@ -46,7 +46,7 @@
 								</td>
 								<td>
 									<?php 
-									echo '<img src="' . $this->webroot . 'fotos/' . $atividade['User']['id'] . '/premios/' . $atividade['Premiacao']['id'] . '/' . $atividade['Premiacao']['foto_premio'] . '"	 class="img-circle" height="35">'; ?>
+									echo '<img src="' . $this->webroot . 'fotos/' . $atividade['User']['id'] . '/premios/' . $atividade['Premiacao']['id'] . '/' . $atividade['Premiacao']['foto_premio'] . '"	 class="img-circle" height="35" width="35">'; ?>
 								</td>
 								<td>
 									<?php echo $atividade['Premiacao']['titulo']; ?>

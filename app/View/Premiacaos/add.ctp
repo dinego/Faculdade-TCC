@@ -31,7 +31,7 @@
 							<label class="control-label col-md-3 col-sm-3 col-xs-12" for="titulo">Título <span class="required">*</span>
 							</label>
 							<div class="col-md-6 col-sm-6 col-xs-12">
-								<?php echo $this->Form->input('titulo', array('class' => 'form-control', 'label' => false)) ?>
+								<?php echo $this->Form->input('titulo', array('class' => 'form-control', 'label' => false,  'required')) ?>
 							</div>
 						</div>
 
@@ -39,7 +39,7 @@
 							<label class="control-label col-md-3 col-sm-3 col-xs-12" for="descricao">Descrição (Atividade) <span class="required">*</span>
 							</label>
 							<div class="col-md-9 col-sm-9 col-xs-12">
-								<?php echo $this->Form->input('descricao', array('class' => 'form-control', 'type' => 'textarea', 'label' => false)) ?>
+								<?php echo $this->Form->input('descricao', array('class' => 'form-control', 'type' => 'textarea', 'label' => false, 'required')) ?>
 							</div>
 						</div>
 
@@ -47,15 +47,22 @@
 							<label class="control-label col-md-3 col-sm-3 col-xs-12" for="role">Foto da premiação
 							</label>
 							<div class="col-md-6 col-sm-6 col-xs-12">
-								<?php echo $this->Form->input('foto_premio', array("class" => "col-md-7 col-xs-12", "label" => false, 'type' => 'file')); ?>
+								<?php echo $this->Form->input('foto_premio', array("class" => "col-md-7 col-xs-12", "label" => false, 'type' => 'file', 'required')); ?>
 							</div>
 						</div>
 
 						<div class="form-group">
-							<label class="control-label col-md-3 col-sm-3 col-xs-12" for="role">Pontos para conquistar <span class="required">*</span>
+							<label class="control-label col-md-3 col-sm-3 col-xs-12" for="role">Pontos individuais <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Quantos pontos irá para o usuário quando a atividade for concluída por ele."></span> <span class="required">*</span>
 							</label>
-							<div class="col-md-6 col-sm-6 col-xs-12">
-								<?php echo $this->Form->input('pontos', array('id'=> 'pontuacao', 'label' => false)) ?>
+							<div class="col-md-3 col-sm-3 col-xs-12">
+								<?php echo $this->Form->input('pontos_individuais', array('label' => false, 'class' => 'form-control', 'required')) ?>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-md-3 col-sm-3 col-xs-12" for="role">Pontos para conquistar <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Pontos para o grupo alcançar para ganhar a premiação final."></span> <span class="required">*</span>
+							</label>
+							<div class="col-md-3 col-sm-3 col-xs-12">
+								<?php echo $this->Form->input('pontos_final', array('label' => false, 'class' => 'form-control', 'required')) ?>
 							</div>
 						</div>
 

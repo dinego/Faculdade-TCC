@@ -5,11 +5,7 @@ Class PremiacaosController extends AppController {
     public function isAuthorized($user) 
     {
         if (parent::isAuthorized($user)) {
-            if ($this->action === 'add') {
-                // Todos os usuários registrados podem criar posts
-                return true;
-            }
-            if (in_array($this->action, array('edit', 'delete'))) {
+            if (in_array($this->action, array('add', 'desativar', 'excluir', 'edit', 'delete'))) {
                 $id = (int) $this->request->params['pass'][0];
 
                 return $this->Premiacao->isOwnedBy($id, $user['id']);
@@ -92,8 +88,15 @@ Class PremiacaosController extends AppController {
     public function edit($id = null)
     {
         $this->Premiacao->id = $id;
+
         if ($this->request->is('get')) {
-            $this->request->data = $this->Premiacao->findById($id);
+            $premiacao = $this->Premiacao->findById($id);
+            $this->request->data = $premiacao;
+
+            $foto = $this->webroot . 'fotos/' . $premiacao['Premiacao']['user_id'] . '/premios/' . $premiacao['Premiacao']['id'] . '/' . $premiacao['Premiacao']['foto_premio'];
+
+            $this->set('fotoPremio', $foto);
+
         } else {
             
             if (!empty($this->request->data['Premiacao']['foto_premio'])) {
@@ -175,7 +178,7 @@ Class PremiacaosController extends AppController {
 
         $this->Premiacao->recursive = 0;
         $options = array(
-            'conditions' => array('Premiacao.user_id' => $this->Auth->user('id')),
+            'conditions' => array('Premiacao.user_id' => $this->Auth->user('id'), 'Premiacao.status !=' => '3'),
             'order' => array('Premiacao.created' => 'DESC'),
             'limit' => 10,
             'group' => 'User.id'
@@ -189,22 +192,25 @@ Class PremiacaosController extends AppController {
     }
 
     public function desativar($id = null) {
+        $this->autoRender = false;
+        if ($this->request->is('get')) {
 
-        parent::isAuthorized($this->Auth->user());
-        
-        $this->Premiacao->id = $id;
-        $premiacao = $this->Premiacao->findById($id);
+            parent::isAuthorized($this->Auth->user());
+            
+            $this->Premiacao->id = $id;
+            $premiacao = $this->Premiacao->findById($id);
 
-        if ($premiacao['Premiacao']['status'] == '1') {
-            //inativo
-            $this->request->data['Premiacao']['status'] = '2';
-        } else {
-            //ativo
-            $this->request->data['Premiacao']['status'] = '1';
-        }
-        if ($this->Premiacao->save($this->request->data)) {
-            $this->Flash->success(__('Premiação alterada com sucesso'));
-            $this->redirect(array('action' => 'index'));
+            if ($premiacao['Premiacao']['status'] == '1') {
+                //inativo
+                $this->request->data['Premiacao']['status'] = '0';
+            } else {
+                //ativo
+                $this->request->data['Premiacao']['status'] = '1';
+            }
+            if ($this->Premiacao->save($this->request->data)) {
+                $this->Flash->success(__('Premiação alterada com sucesso'));
+                $this->redirect(array('action' => 'index'));
+            }
         }
     }
 

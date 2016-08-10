@@ -32,8 +32,8 @@
 								<th>Foto</th>
 								<th>Titulo</th>
 								<th>Descricao</th>
-								<th>Pontos para premio</th>
-								<th>Pontuação requirida</th>
+								<th>Pontos de recompensa</th>
+								<th>Pontuação requirida da atividade</th>
 								<th>Controle</th>
 							</tr>
 						</thead>
@@ -41,15 +41,22 @@
 						<?php foreach ($premiacaos as $key => $premiacao) { ?>
 							<tr>
 								<th scope="row"><?php echo $premiacao['Premiacao']['id'] ?></th>
-								<td><?php echo '<img src="' . $this->webroot . 'fotos/' . $premiacao['Premiacao']['user_id'] . '/premios/' . $premiacao['Premiacao']['id'] . '/' . $premiacao['Premiacao']['foto_premio'] . '"	 class="img-circle" height="35">'; ?></td>	
+								<td><?php echo '<img src="' . $this->webroot . 'fotos/' . $premiacao['Premiacao']['user_id'] . '/premios/' . $premiacao['Premiacao']['id'] . '/' . $premiacao['Premiacao']['foto_premio'] . '"	 class="img-circle" height="35" width="35">'; ?></td>	
 								<td><?php echo $premiacao['Premiacao']['titulo'] ?></td>
 								<td><?php echo $premiacao['Premiacao']['descricao'] ?></td>
 								<td><?php echo $premiacao['Premiacao']['pontos_individuais'] ?></td>
 								<td><?php echo $premiacao['Premiacao']['pontos_final'] ?></td>
 								<td>
 									<a href="<?php echo $this->Html->url(array('controller' => 'premiacaos', 'action' => 'edit', $premiacao['Premiacao']['id'])) ?>" class="btn btn-primary">Editar</a>
-
-									<a href="<?php echo $this->Html->url(array('controller' => 'premiacaos', 'action' => 'desativar', $premiacao['Premiacao']['id'])) ?>" class="btn btn-default">Desativar</a>
+									<?php
+										if ($premiacao['Premiacao']['status'] == 1) {
+											$btn = "Desativar";
+										} else {
+											$btn = "Ativar";
+										}
+									?>
+									<a href="<?php echo $this->Html->url(array('controller' => 'premiacaos', 'action' => 'desativar', $premiacao['Premiacao']['id'])) ?>" class="btn btn-default"><?php echo $btn; ?></a>
+									
 
 									<a href="<?php echo $this->Html->url(array('controller' => 'premiacaos', 'action' => 'excluir', $premiacao['Premiacao']['id'])) ?>" class="btn btn-danger">Excluir</a>
 								</td>
