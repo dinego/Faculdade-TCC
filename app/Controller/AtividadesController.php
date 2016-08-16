@@ -4,9 +4,8 @@ Class AtividadesController extends AppController {
 
 	public function isAuthorized($user) {
         if (parent::isAuthorized($user)) {
-            if (in_array($this->action, array('edit', 'delete', 'add', 'desativar'))) {
+            if (in_array($this->action, array('edit', 'delete', 'add', 'desativar', 'ativ_alunos'))) {
                 $id = (int) $this->request->params['pass'];
-
                 return $this->Atividade->isOwnedBy($id, $user['id']);
             }
         }
@@ -108,9 +107,10 @@ Class AtividadesController extends AppController {
 
 	            $this->request->data['Atividade']['user_id'] = $user['id'];
 
+	            $alternativaCorreta = $this->request->data["RespostaAtividade"]["alternativa_id"];
+	            $this->request->data['Alternativa'][$alternativaCorreta]['correta'] = 1;
+
 	            if ($this->Atividade->saveAll($this->request->data)) {
-	            	//$this->Atividade->Alternativa->find('first', array('conditions' => array('')));
-	                //$this->Atividade->Alternativa->	$this->request->data['RespostaAtividade']['alternativa_id']
 
 	            	if (!empty($this->request->data['Atividade']['arquivo'])) {
 		                $_UP['pasta'] = WWW_ROOT . "fotos/" . $user['id'] . "/atividades/auxiliar/" . $this->Atividade->id . "/";
@@ -133,12 +133,16 @@ Class AtividadesController extends AppController {
 	                $this->Flash->success(__('Atividade salva com Sucesso'));
 	                $this->redirect(array('action' => 'index'));
 	            } else {
-	                $this->Flash->error(__('Não conseguimos salvar o premio! Erro:' . $_UP['erros']));
+	                $this->Flash->error(__('Não conseguimos salvar a atividade! Erro:' . $_UP['erros']));
 	            }
 	        } else {
 	        	$this->request->data['Atividade']['arquivo'] = '';
-	        	if ($this->Atividade->saveAll($this->request->data)) {
 
+	        	// setando a alternativa correta
+	        	$alternativaCorreta = $this->request->data["RespostaAtividade"]["alternativa_id"];
+	            $this->request->data['Alternativa'][$alternativaCorreta]['correta'] = 1;
+
+	        	if ($this->Atividade->saveAll($this->request->data)) {
 	        		
 					$this->loadModel('AcessoAtividade');
 					foreach ($this->request->data["Atividade"]["grupos"] as $key => $grupo) {
@@ -223,8 +227,25 @@ Class AtividadesController extends AppController {
         // Roda a consulta, já trazendo os resultados paginados
         $atividades = $this->paginate('Atividade');
         // Envia os dados pra view
-        $this->set('atividades', $atividades);
+        $this->set('atividades', $atividades); 
+	}
 
-        
+	public function ativ_alunos()
+	{
+		$this->layout = 'dashboard';
+		$this->loadModel('GrupoUser');
+		$this->loadModel('AcessoAtividade');
+
+		$gruposUsers = $this->GrupoUser->find('all', array('conditions' => array('GrupoUser.user_id' => $this->Auth->user('id'))));
+
+		$atividades = array();
+		foreach ($gruposUsers as $key => $grupo) {
+			$acesso = $this->AcessoAtividade->find('all', array('conditions' => array('AcessoAtividade.grupo_id' => $grupo['GrupoUser']['grupo_id'])));
+			foreach ($acesso as $key => $value) {
+				$atividades[$key] = $value["Atividade"];
+			}
+		}
+
+		$this->set('atividades', $atividades);
 	}
 }

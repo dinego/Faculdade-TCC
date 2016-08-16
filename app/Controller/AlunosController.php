@@ -12,7 +12,7 @@ class AlunosController extends AppController {
 
 
 	public function index() {
-        $this->layout  = "alunos";
+        $this->layout  = "dashboard";
 
         $this->set('title_for_layout', 'Atividades');
 		

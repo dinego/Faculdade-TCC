@@ -49,7 +49,11 @@ class AppController extends Controller {
         if (!empty($user['role']) && $user['role'] === 'admin' || $user['role'] === 'prof') {
             return true; // Admin pode acessar todas actions
         } else if (!empty($user['role']) && $user['role'] === 'aluno') {
-            return false;
+            if (in_array($this->action, array('index', 'ativ_alunos'))) {
+                return true;
+            } else {
+                return false;
+            }
             $this->redirect(array('controller' => 'alunos', 'action' => 'index'));
         } else {
             return false;
