@@ -49,7 +49,7 @@ class AppController extends Controller {
         if (!empty($user['role']) && $user['role'] === 'admin' || $user['role'] === 'prof') {
             return true; // Admin pode acessar todas actions
         } else if (!empty($user['role']) && $user['role'] === 'aluno') {
-            if (in_array($this->action, array('index', 'ativ_alunos'))) {
+            if (in_array($this->action, array('index', 'ativ_alunos', 'atividade'))) {
                 return true;
             } else {
                 return false;
@@ -60,7 +60,8 @@ class AppController extends Controller {
         }
     }
 
-    function beforeFilter() {
+    function beforeFilter($id = null) {
+        $this->layout = 'dashboard';
         $this->Auth->allow('index', 'view');
     }    
 

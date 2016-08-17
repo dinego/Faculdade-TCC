@@ -4,9 +4,11 @@ Class AtividadesController extends AppController {
 
 	public function isAuthorized($user) {
         if (parent::isAuthorized($user)) {
-            if (in_array($this->action, array('edit', 'delete', 'add', 'desativar', 'ativ_alunos'))) {
+            if (in_array($this->action, array('edit', 'delete', 'add', 'desativar'))) {
                 $id = (int) $this->request->params['pass'];
                 return $this->Atividade->isOwnedBy($id, $user['id']);
+            } else if (in_array($this->action, array('ativ_alunos', 'atividade'))) {
+            	return true;
             }
         }
         return false;
@@ -247,5 +249,13 @@ Class AtividadesController extends AppController {
 		}
 
 		$this->set('atividades', $atividades);
+	}
+
+	public function atividade($id = null)
+	{
+		if (!$this->request->is('post')) {
+			$atividade = $this->Atividade->find('first', array('conditions' => array('Atividade.id' => $id)));
+			$this->set('atividade', $atividade);
+		}
 	}
 }
