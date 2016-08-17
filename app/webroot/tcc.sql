@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: 16-Ago-2016 às 15:42
+-- Generation Time: 17-Ago-2016 às 15:41
 -- Versão do servidor: 10.1.13-MariaDB
 -- PHP Version: 5.5.37
 
@@ -207,6 +207,21 @@ INSERT INTO `respostas_atividades` (`id`, `user_id`, `atividade_id`, `alternativ
 -- --------------------------------------------------------
 
 --
+-- Estrutura da tabela `respo_alternativas`
+--
+
+CREATE TABLE `respo_alternativas` (
+  `id` int(11) NOT NULL,
+  `atividade_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  `tentativas_restantes` int(11) NOT NULL DEFAULT '3'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Estrutura da tabela `users`
 --
 
@@ -301,6 +316,12 @@ ALTER TABLE `respostas_atividades`
   ADD PRIMARY KEY (`id`,`user_id`,`atividade_id`,`alternativa_id`);
 
 --
+-- Indexes for table `respo_alternativas`
+--
+ALTER TABLE `respo_alternativas`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -346,6 +367,11 @@ ALTER TABLE `premiacaos`
 --
 ALTER TABLE `respostas_atividades`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
+--
+-- AUTO_INCREMENT for table `respo_alternativas`
+--
+ALTER TABLE `respo_alternativas`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `users`
 --
