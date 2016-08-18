@@ -1,11 +1,12 @@
-<section class="atividade">
+
+<section class="atividade container">
     <div class="breadcrumb">
         <div class="container">
             <div class="row">
-                <div class="col-sm-8">
+                <div class="col-md-6">
                     <h2>Atividades</h2>
                 </div>
-                <div class="col-sm-4 text-right">
+                <div class="col-sm-5 text-right" style="overflow:hidden">
                     <ul>
                         <li><span class="ti-angle-left"></span> <a href="<?php echo $this->Html->url(array('controller' => 'alunos', 'action' => 'index')) ?>">Voltar para dashboard</a></li>
                     </ul>
@@ -54,7 +55,9 @@
                             <?php } 
 
                                 if ($atividade['Atividade']['tipo_atividade'] == 2) {
-                                    $this->Form->create('RespAlternativas');
+                                    
+                                    echo $this->Form->create('RespoAlternativas');
+                                    
                                     foreach ($atividade['Alternativa'] as $key => $alternativa) {
                                     
                             ?>
@@ -66,14 +69,15 @@
                                             </div>
                             <?php 
                                     }
-                            ?>
-                            <button type="submit" class="btn btn-success">Responder <span class="ti-check"></span></button>
-                            <?php
+                                } else {
+                                    echo $this->Form->create('RespoDissertativa');
+                                    echo $this->Form->input('resposta.RespoDissertativa', array('type' => 'textarea'));
                                 }
-
                             ?>
+                            <input type="submit" class="btn btn-success" value="Responder Atividade" />
+                            <?php echo $this->Form->end(); ?>
                             
-                            <!-- resposta do form -->
+                            <!-- resposta do form 
                             <div class="resposta">
                                 <div class="alert alert-success" role="alert">
                                     Parabéns! Você respondeu a atividade XXXXXXXXXXX! <br>
@@ -84,6 +88,7 @@
                                     <div class="pontosGanhos">Pontos ganhos: <strong>35</strong></div>
                                 </div>
                             </div>
+                            -->
                         </div>
                     </div>
                 </div>

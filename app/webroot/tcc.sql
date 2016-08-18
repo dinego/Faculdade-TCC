@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: 17-Ago-2016 às 15:41
+-- Generation Time: 18-Ago-2016 às 16:58
 -- Versão do servidor: 10.1.13-MariaDB
 -- PHP Version: 5.5.37
 
@@ -222,6 +222,21 @@ CREATE TABLE `respo_alternativas` (
 -- --------------------------------------------------------
 
 --
+-- Estrutura da tabela `respo_dissertativas`
+--
+
+CREATE TABLE `respo_dissertativas` (
+  `id` int(11) NOT NULL,
+  `atividade_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `resposta` text NOT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Estrutura da tabela `users`
 --
 
@@ -322,6 +337,12 @@ ALTER TABLE `respo_alternativas`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `respo_dissertativas`
+--
+ALTER TABLE `respo_dissertativas`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -341,7 +362,7 @@ ALTER TABLE `users_grupos`
 -- AUTO_INCREMENT for table `acessos_atividades`
 --
 ALTER TABLE `acessos_atividades`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 --
 -- AUTO_INCREMENT for table `alternativas`
 --
@@ -371,6 +392,11 @@ ALTER TABLE `respostas_atividades`
 -- AUTO_INCREMENT for table `respo_alternativas`
 --
 ALTER TABLE `respo_alternativas`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `respo_dissertativas`
+--
+ALTER TABLE `respo_dissertativas`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `users`

@@ -253,7 +253,25 @@ Class AtividadesController extends AppController {
 
 	public function atividade($id = null)
 	{
-		if (!$this->request->is('post')) {
+		if ($this->request->is('post')) {
+			var_dump($this->request->data);
+
+			$alternativa = $this->Alternativa->findById($this->request->data['Alternativa']['alternativa']);
+
+			$respUser = $this->RespoAlternativa->find('first', array('conditions' => array('RespoAlternativa.atividade_id' => $id, 'RespoAlternativa.user_id' => $this->Auth->user('id'))));
+
+
+			if ($alternativa['Alternativa']['correta'] == 1) {
+				if (!empty($respUser)) {
+					$this->request->data['RespoAlternativa']['user_id'] = $this->Auth->user('id');
+					$this->request->data['RespoAlternativa']['']
+					//tamiris, 243 motorista  
+					//3541-4198, mauricio
+					//130;
+				}
+			}
+			die();
+		} else {
 			$atividade = $this->Atividade->find('first', array('conditions' => array('Atividade.id' => $id)));
 			$this->set('atividade', $atividade);
 		}

@@ -5,7 +5,7 @@ class UsersController extends AppController {
 
     public function beforeFilter() {
         parent::beforeFilter();
-        $this->Auth->allow('cadastro', 'logout');
+        $this->Auth->allow('cadastro', 'logout', 'login');
     }
 
 
