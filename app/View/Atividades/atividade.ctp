@@ -71,24 +71,21 @@
                                     }
                                 } else {
                                     echo $this->Form->create('RespoDissertativa');
-                                    echo $this->Form->input('resposta.RespoDissertativa', array('type' => 'textarea'));
+                                    echo $this->Form->input('RespoDissertativa.resposta', array('type' => 'textarea'));
                                 }
+
+                                if (!empty($finalizada) && $finalizada == false) {
                             ?>
                             <input type="submit" class="btn btn-success" value="Responder Atividade" />
-                            <?php echo $this->Form->end(); ?>
-                            
-                            <!-- resposta do form 
-                            <div class="resposta">
-                                <div class="alert alert-success" role="alert">
-                                    Parabéns! Você respondeu a atividade XXXXXXXXXXX! <br>
-                                </div>
-                                <div class="pontuacao">
-                                    <span class="ti-thumb-up"></span><strong> Total de acertos:</strong> 20<br>
-                                    <span class="ti-thumb-down"></span> <strong>Total de erros:</strong> 5<br>
-                                    <div class="pontosGanhos">Pontos ganhos: <strong>35</strong></div>
-                                </div>
-                            </div>
-                            -->
+                            <?php
+                                } else {
+                            ?>
+                                <input type="submit" class="btn btn-success disabled" disabled="disabled" value="Você finalizou essa atividade" />
+                            <?php
+                                }
+
+                                echo $this->Form->end(); 
+                            ?>
                         </div>
                     </div>
                 </div>

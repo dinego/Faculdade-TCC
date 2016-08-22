@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: 18-Ago-2016 às 16:58
+-- Generation Time: 22-Ago-2016 às 16:06
 -- Versão do servidor: 10.1.13-MariaDB
 -- PHP Version: 5.5.37
 
@@ -216,8 +216,18 @@ CREATE TABLE `respo_alternativas` (
   `user_id` int(11) NOT NULL,
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
-  `tentativas_restantes` int(11) NOT NULL DEFAULT '3'
+  `tentativas_restantes` int(11) NOT NULL DEFAULT '3',
+  `finalizada` tinyint(1) NOT NULL DEFAULT '0',
+  `tentativa` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Extraindo dados da tabela `respo_alternativas`
+--
+
+INSERT INTO `respo_alternativas` (`id`, `atividade_id`, `user_id`, `created`, `modified`, `tentativas_restantes`, `finalizada`, `tentativa`) VALUES
+(1, 25, 1, '2016-08-22 14:09:54', '2016-08-22 14:27:26', 0, 0, 0),
+(2, 27, 1, '2016-08-22 14:28:31', '2016-08-22 14:28:45', 1, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -231,7 +241,8 @@ CREATE TABLE `respo_dissertativas` (
   `user_id` int(11) NOT NULL,
   `resposta` text NOT NULL,
   `created` datetime NOT NULL,
-  `modified` datetime NOT NULL
+  `modified` datetime NOT NULL,
+  `pontos` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -392,7 +403,7 @@ ALTER TABLE `respostas_atividades`
 -- AUTO_INCREMENT for table `respo_alternativas`
 --
 ALTER TABLE `respo_alternativas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `respo_dissertativas`
 --

@@ -254,18 +254,29 @@ Class AtividadesController extends AppController {
 	public function atividade($id = null)
 	{
 		$this->layout = 'dashboard';
+		
+		$atividade = $this->Atividade->findById($id);
+		$this->loadModel('Alternativa');
+		$this->loadModel('RespoAlternativa');		
+					
+		$respUser = $this->RespoAlternativa->find('first', array('conditions' => array('RespoAlternativa.atividade_id' => $id, 'RespoAlternativa.user_id' => $this->Auth->user('id'))));
+		
 		if ($this->request->is('post')) {
-			var_dump($this->request->data['Alternativa']['alternativa']);
 
-			$this->loadModel('Alternativa');
 			$alternativa = $this->Alternativa->findById($this->request->data['Alternativa']['alternativa']);
-			
-			$this->loadModel('RespoAlternativa');
-						
-			$respUser = $this->RespoAlternativa->find('first', array('conditions' => array('RespoAlternativa.atividade_id' => $id, 'RespoAlternativa.user_id' => $this->Auth->user('id'))));
-			
-			if (!empty($respUser)) {
+
+			if (!empty($respUser) && $respUser['RespoAlternativa']['finalizada'] == false) {
 				$this->RespoAlternativa->id = $respUser['RespoAlternativa']['id'];
+
+				if ($atividade['Atividade']['tipo_atividade'] == 1) {
+					$this->request->data['RespoDissertativa']['user_id'] = $this->Auth->user('id');
+					$this->request->data['RespoDissertativa']['atividade_id'] = $id;
+
+					if ($this->RespoDissertativa->save($this->request->data)) {							
+						$this->Flash->success(__('Parabens, cadastramos a sua resposta, aguarde o professor avaliá-la.'));
+						$this->redirect(array('controller' => 'atividades', 'action' => 'ativ_alunos'));	
+					}
+				}
 
 				if ($respUser['RespoAlternativa']['tentativas_restantes'] > 0) {
 
@@ -275,6 +286,7 @@ Class AtividadesController extends AppController {
 						$this->request->data['RespoAlternativa']['tentativas_restantes'] = $respUser['RespoAlternativa']['tentativas_restantes'] - 1;
 						$this->request->data['RespoAlternativa']['atividade_id'] = $id;
 						$this->request->data['RespoAlternativa']['tentativa'] = true;
+						$this->request->data['RespoAlternativa']['finalizada'] = true;
 
 						if ($this->RespoAlternativa->save($this->request->data)) {
 							
@@ -292,6 +304,7 @@ Class AtividadesController extends AppController {
 							$this->redirect(array('controller' => 'atividades', 'action' => 'ativ_alunos'));
 						}
 					}
+					
 				} else {
 					$this->Flash->error(__('Sentimos muito. Tentativas limites atingidas.'));
 				}
@@ -319,11 +332,13 @@ Class AtividadesController extends AppController {
 					}
 				}
 			}
-		} 
-		
+		}
 
-		$atividade = $this->Atividade->find('first', array('conditions' => array('Atividade.id' => $id)));
+		
 		$this->set('atividade', $atividade);
+		if (!empty($respUser)) {
+			$this->set('finalizada', $respUser["RespoAlternativa"]["finalizada"]);
+		}
 	
 	}
 }
