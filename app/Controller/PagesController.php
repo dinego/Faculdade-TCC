@@ -45,6 +45,7 @@ class PagesController extends AppController {
  *	or MissingViewException in debug mode.
  */
 	public function display() {
+		$this->layout = 'default';
 
 		$this->loadModel('Atividade');
 		$participacoes = $this->Atividade->RespostaAtividade->find('count', array('conditions' => array('RespostaAtividade.user_id' => $this->Auth->user('id'))));

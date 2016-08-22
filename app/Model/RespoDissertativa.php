@@ -1,5 +1,5 @@
 <?php 
-class RespoAlternativa extends AppModel {
-	public $name = 'Alternativa';
-	public $useTable = 'respo_dissertativa';
+class RespoDissertativa extends AppModel {
+	public $name = 'Dissertativa';
+	public $useTable = 'respo_dissertativas';
 }

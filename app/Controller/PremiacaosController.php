@@ -6,7 +6,7 @@ Class PremiacaosController extends AppController {
     {
         if (parent::isAuthorized($user)) {
             if (in_array($this->action, array('add', 'desativar', 'excluir', 'edit', 'delete'))) {
-                $id = (int) $this->request->params['pass'][0];
+                $id = (int) $this->request->params['pass'];
 
                 return $this->Premiacao->isOwnedBy($id, $user['id']);
             }

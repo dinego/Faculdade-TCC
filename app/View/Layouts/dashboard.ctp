@@ -69,7 +69,13 @@
         </div>
     </nav>
 
-    <?php echo $this->Flash->render(); ?>
+    <?php 
+
+    echo $this->Flash->render(); 
+    echo $this->Session->flash();
+    
+    ?>
+
     <?php echo $this->fetch('content'); ?>
 
     <footer>

@@ -61,7 +61,6 @@ class AppController extends Controller {
     }
 
     function beforeFilter() {
-        $this->layout = 'dashboard';
         $this->Auth->allow('index', 'view');
     }    
 

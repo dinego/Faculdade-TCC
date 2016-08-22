@@ -253,27 +253,77 @@ Class AtividadesController extends AppController {
 
 	public function atividade($id = null)
 	{
+		$this->layout = 'dashboard';
 		if ($this->request->is('post')) {
-			var_dump($this->request->data);
+			var_dump($this->request->data['Alternativa']['alternativa']);
 
+			$this->loadModel('Alternativa');
 			$alternativa = $this->Alternativa->findById($this->request->data['Alternativa']['alternativa']);
-
+			
+			$this->loadModel('RespoAlternativa');
+						
 			$respUser = $this->RespoAlternativa->find('first', array('conditions' => array('RespoAlternativa.atividade_id' => $id, 'RespoAlternativa.user_id' => $this->Auth->user('id'))));
+			
+			if (!empty($respUser)) {
+				$this->RespoAlternativa->id = $respUser['RespoAlternativa']['id'];
 
+				if ($respUser['RespoAlternativa']['tentativas_restantes'] > 0) {
 
-			if ($alternativa['Alternativa']['correta'] == 1) {
-				if (!empty($respUser)) {
+					if ($alternativa['Alternativa']['correta'] == true) {
+
+						$this->request->data['RespoAlternativa']['user_id'] = $this->Auth->user('id');
+						$this->request->data['RespoAlternativa']['tentativas_restantes'] = $respUser['RespoAlternativa']['tentativas_restantes'] - 1;
+						$this->request->data['RespoAlternativa']['atividade_id'] = $id;
+						$this->request->data['RespoAlternativa']['tentativa'] = true;
+
+						if ($this->RespoAlternativa->save($this->request->data)) {
+							
+							$this->Flash->success(__('Parabens, cadastramos a sua resposta e ela esta correta.'));
+							$this->redirect(array('controller' => 'atividades', 'action' => 'ativ_alunos'));	
+						}
+					} else {
+						$this->request->data['RespoAlternativa']['user_id'] = $this->Auth->user('id');
+						$this->request->data['RespoAlternativa']['tentativas_restantes'] = $respUser['RespoAlternativa']['tentativas_restantes'] - 1;
+						$this->request->data['RespoAlternativa']['atividade_id'] = $id;
+						$this->request->data['RespoAlternativa']['tentativa'] = false;
+
+						if ($this->RespoAlternativa->save($this->request->data)) {
+							$this->Flash->error(__('Resposta Errada. Tentativas restantes: '));
+							$this->redirect(array('controller' => 'atividades', 'action' => 'ativ_alunos'));
+						}
+					}
+				} else {
+					$this->Flash->error(__('Sentimos muito. Tentativas limites atingidas.'));
+				}
+			} else {
+				if ($alternativa['Alternativa']['correta'] == true) {
+
 					$this->request->data['RespoAlternativa']['user_id'] = $this->Auth->user('id');
-					$this->request->data['RespoAlternativa']['']
-					//tamiris, 243 motorista  
-					//3541-4198, mauricio
-					//130;
+					$this->request->data['RespoAlternativa']['atividade_id'] = $id;
+					$this->request->data['RespoAlternativa']['tentativa'] = true;
+
+					if ($this->RespoAlternativa->save($this->request->data)) {
+						$this->Flash->success(__('Parabens, cadastramos a sua resposta e ela esta correta.'));
+						$this->redirect(array('controller' => 'atividades', 'action' => 'ativ_alunos'));	
+					}
+				} else {
+					$this->request->data['RespoAlternativa']['user_id'] = $this->Auth->user('id');
+					$this->request->data['RespoAlternativa']['tentativas_restantes'] = 2;
+					$this->request->data['RespoAlternativa']['atividade_id'] = $id;
+					$this->request->data['RespoAlternativa']['tentativa'] = false;
+
+					if ($this->RespoAlternativa->save($this->request->data)) {
+						
+						$this->Flash->error(__('Resposta Errada. Tentativas restantes: '));
+						$this->redirect(array('controller' => 'atividades', 'action' => 'ativ_alunos'));
+					}
 				}
 			}
-			die();
-		} else {
-			$atividade = $this->Atividade->find('first', array('conditions' => array('Atividade.id' => $id)));
-			$this->set('atividade', $atividade);
-		}
+		} 
+		
+
+		$atividade = $this->Atividade->find('first', array('conditions' => array('Atividade.id' => $id)));
+		$this->set('atividade', $atividade);
+	
 	}
 }
