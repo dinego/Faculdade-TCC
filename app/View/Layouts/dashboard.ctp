@@ -59,9 +59,9 @@
                             ?>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href="perfil.html">Perfil</a></li>
-                            <li><a href="configuracoes.html">Configurações</a></li>
-                            <li><a href="logout">Sair</a></li>
+                            <li><a href="<?php echo $this->Html->url(array('controller' => 'users', 'action' => 'profile_edit')) ?>">Perfil</a></li>
+                            <li><a href="<?php echo $this->Html->url(array('controller' => 'users', 'action' => 'resumo')) ?>">Meu resumo</a></li>
+                            <li><a href="<?php echo $this->Html->url(array('controller' => 'users', 'action' => 'logout')) ?>">Sair</a></li>
                         </ul>
                     </li>
                 </ul>

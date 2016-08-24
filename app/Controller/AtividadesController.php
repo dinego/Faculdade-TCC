@@ -234,6 +234,7 @@ Class AtividadesController extends AppController {
 
 	public function ativ_alunos()
 	{
+		$this->recursive = 2;
 		$this->layout = 'dashboard';
 		$this->loadModel('GrupoUser');
 		$this->loadModel('AcessoAtividade');
@@ -244,7 +245,7 @@ Class AtividadesController extends AppController {
 		foreach ($gruposUsers as $key => $grupo) {
 			$acesso = $this->AcessoAtividade->find('all', array('conditions' => array('AcessoAtividade.grupo_id' => $grupo['GrupoUser']['grupo_id'])));
 			foreach ($acesso as $key => $value) {
-				$atividades[$key] = $value["Atividade"];
+				$atividades[$key] = $this->Atividade->findById($value["Atividade"]['id']);
 			}
 		}
 

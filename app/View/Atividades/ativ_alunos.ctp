@@ -14,36 +14,29 @@
         </div>
     </div>
     <div class="container-fluid">
-        <div class="row">
-            <div class="col-sm-3 nopadding">
-                <div class="sidebar-nav">
-                    <div class="navbar navbar-default" role="navigation">
-                        <div class="navbar-header">
-                            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-navbar-collapse">
-                                <span class="sr-only">Toggle navigation</span>
-                                <span class="icon-bar"></span>
-                                <span class="icon-bar"></span>
-                                <span class="icon-bar"></span>
-                            </button>
-                            <span class="visible-xs navbar-brand">Menu de atividades</span>
-                        </div>
-                        <div class="navbar-collapse collapse sidebar-navbar-collapse">
-                            <ul class="nav navbar-nav">
-                                <?php 
-                                    foreach ($atividades as $key => $ativi) {
-                                ?>
-                                    <li><a href="<?php echo $this->Html->url(array('controller' => 'atividades', 'action' => 'atividade', $ativi['id'])); ?>"><span class="ti-angle-right"></span> <?php echo $ativi['titulo']; ?></a></li>
-                                <?php
-                                    }
-                                ?>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-9">
-                
-            </div>
+        <div class="container">
+            <table class="table tabl-bordered">
+            <tr>
+                <th>Foto do Prêmio:</th>
+                <th>Título:</th>
+                <th>Prêmio:</th>
+                <th>Pontos para ganhar o prêmio:</th>
+                <th>Pontos por acerto:</th>
+            </tr>
+            <?php
+                foreach ($atividades as $key => $ativ) {
+            ?>
+                <tr style="cursor:pointer" onclick="location.href='<?php echo $this->Html->url(array('controller' => 'atividades', 'action' => 'atividade', $ativ['Atividade']['id'])) ?>'">
+                    <td><img src="<?php echo $this->webroot . "fotos/" . $ativ['User']['id'] . "/premios/" . $ativ['Premiacao']['id'] . "/" . $ativ['Premiacao']['foto_premio'] ?>" class="img-circle" width="35" height="35" /></td>
+                    <td><?php echo $ativ['Atividade']['titulo'] ?></td>
+                    <td><?php echo $ativ['Premiacao']['titulo'] ?></td>
+                    <td><?php echo $ativ['Premiacao']['pontos_final'] ?></td>
+                    <td><?php echo $ativ['Premiacao']['pontos_individuais'] ?></td>
+                </tr>
+            <?php
+                } 
+            ?>
+            </table>
         </div>
     </div>
 </section>

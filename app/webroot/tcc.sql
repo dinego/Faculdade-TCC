@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: 22-Ago-2016 às 16:06
+-- Generation Time: 24-Ago-2016 às 17:04
 -- Versão do servidor: 10.1.13-MariaDB
 -- PHP Version: 5.5.37
 
@@ -227,7 +227,7 @@ CREATE TABLE `respo_alternativas` (
 
 INSERT INTO `respo_alternativas` (`id`, `atividade_id`, `user_id`, `created`, `modified`, `tentativas_restantes`, `finalizada`, `tentativa`) VALUES
 (1, 25, 1, '2016-08-22 14:09:54', '2016-08-22 14:27:26', 0, 0, 0),
-(2, 27, 1, '2016-08-22 14:28:31', '2016-08-22 14:28:45', 1, 1, 1);
+(2, 27, 1, '2016-08-22 14:28:31', '2016-08-22 14:28:45', 1, 0, 0);
 
 -- --------------------------------------------------------
 
