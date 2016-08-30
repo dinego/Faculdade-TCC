@@ -52,35 +52,56 @@
                                 <p>Material de apoio:</p> 
                                 <span class="icon download"><a href="<?php echo $this->webroot . 'fotos/' . $atividade['User']['id'] . '/atividades/auxiliar/' . $atividade['Atividade']['id'] . '/' . $atividade['Atividade']['arquivo']; ?>" title="Arquivo de apoio" target="_blank"><i class="fa fa-download" aria-hidden="true"></i></a></span>
                             </div>
+  
                             <?php } 
 
-                                if ($atividade['Atividade']['tipo_atividade'] == 2) {
+                                function shuffle_assoc($list) { 
+                                    if (!is_array($list)) return $list; 
+
+                                    $keys = array_keys($list); 
+                                    shuffle($keys); 
+                                    $random = array(); 
+                                    foreach ($keys as $key) { 
+                                        $random[$key] = $list[$key]; 
+                                    }
+                                    return $random; 
+                                } 
+
+                                if ($atividade['Atividade']['tipo_atividade'] == 2) { 
                                     
                                     echo $this->Form->create('RespoAlternativas');
-                                    
+                                    ?>
+
+                                    <ol type="A">
+                                    <?php
+
+                                    $alter_mixed = array();
+                                    $atividade['Alternativa'] = shuffle_assoc($atividade['Alternativa']);
                                     foreach ($atividade['Alternativa'] as $key => $alternativa) {
                                     
                             ?>
-                                        <div class="radio">
+                                        <li>
+                                            <div class="radio">
                                                 <label>
                                                     <input type="radio" name="data[Alternativa][alternativa]" id="data[Alternativa][alternativa][<?php echo $key ?>]" value="<?php echo $alternativa['id'] ?>">
                                                     <?php echo $alternativa["alternativa"] ?>
                                                 </label>
                                             </div>
-                            <?php 
-                                    }
+                                        </li>
+                            <?php   } ?>
+                                    </ol>
+                            <?php
                                 } else {
                                     echo $this->Form->create('RespoDissertativa');
                                     echo $this->Form->input('RespoDissertativa.resposta', array('type' => 'textarea'));
                                 }
-
-                                if (!empty($finalizada) && $finalizada == false) {
+                                if ($finalizada == false) {
                             ?>
-                            <input type="submit" class="btn btn-success" value="Responder Atividade" />
+                                    <input type="submit" class="btn btn-success" value="Responder Atividade" />
                             <?php
                                 } else {
                             ?>
-                                <input type="submit" class="btn btn-success disabled" disabled="disabled" value="Você finalizou essa atividade" />
+                                    <input type="submit" class="btn btn-success disabled" disabled="disabled" value="Você finalizou essa atividade" />
                             <?php
                                 }
 

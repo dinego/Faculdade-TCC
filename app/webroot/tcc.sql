@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: 24-Ago-2016 às 17:04
+-- Generation Time: 30-Ago-2016 às 17:00
 -- Versão do servidor: 10.1.13-MariaDB
 -- PHP Version: 5.5.37
 
@@ -107,7 +107,7 @@ CREATE TABLE `atividades` (
 INSERT INTO `atividades` (`id`, `titulo`, `descricao`, `user_id`, `premiacaos_id`, `nivel_id`, `tipo_atividade`, `inicio`, `fim`, `created`, `modified`, `arquivo`) VALUES
 (25, 'Teste 1', '<p>eae</p>\r\n', 1, 2, 1, '2', '2016-05-01 00:00:00', '2016-06-01 00:00:00', '2016-08-11 14:04:49', '2016-08-11 14:04:49', '00314357.pdf'),
 (26, 'Teste Dois', '<p>eaeee</p>\r\n', 1, 2, 1, '2', '2016-05-01 00:00:00', '2016-06-01 00:00:00', '2016-08-11 14:09:57', '2016-08-11 14:09:57', '00314357.pdf'),
-(27, 'Teste 3', '<p>eaeee</p>\r\n', 1, 2, 1, '2', '2016-05-01 00:00:00', '2016-06-01 00:00:00', '2016-08-11 14:15:11', '2016-08-11 14:15:11', '00314357.pdf');
+(27, 'Atividade ainda ativa', '<p>eaeee</p>\r\n', 1, 2, 1, '2', '2016-05-01 00:00:00', '2016-06-01 00:00:00', '2016-08-11 14:15:11', '2016-08-11 14:15:11', '00314357.pdf');
 
 -- --------------------------------------------------------
 
@@ -226,8 +226,9 @@ CREATE TABLE `respo_alternativas` (
 --
 
 INSERT INTO `respo_alternativas` (`id`, `atividade_id`, `user_id`, `created`, `modified`, `tentativas_restantes`, `finalizada`, `tentativa`) VALUES
-(1, 25, 1, '2016-08-22 14:09:54', '2016-08-22 14:27:26', 0, 0, 0),
-(2, 27, 1, '2016-08-22 14:28:31', '2016-08-22 14:28:45', 1, 0, 0);
+(1, 25, 1, '2016-08-22 14:09:54', '2016-08-22 14:27:26', 2, 1, 1),
+(2, 27, 1, '2016-08-22 14:28:31', '2016-08-30 16:58:59', 0, 1, 1),
+(3, 25, 3, '2016-08-30 00:00:00', '2016-08-30 00:00:00', 2, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -403,7 +404,7 @@ ALTER TABLE `respostas_atividades`
 -- AUTO_INCREMENT for table `respo_alternativas`
 --
 ALTER TABLE `respo_alternativas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT for table `respo_dissertativas`
 --

@@ -113,12 +113,14 @@
 
                         <div id="recompensas" class="tab-pane fade">
                             <h2 class="title green">Minhas recompensas</h2>
-
+                            <?php 
+                            foreach ($premiacao_user as $key => $premio) {
+                            ?>
                             <div class="col-xs-6 col-md-4 content">
-                                <img src="http://fakeimg.pl/350x200/?text=Foto" class="img-responsive">
+                                <img src="<?php echo $this->webroot . 'fotos/' . $premio['Premiacao']['user_id'] . '/premios/' . $premio['Premiacao']['id'] . '/' . $premio['Premiacao']['foto_premio'] ?>" width="350" height="200" class="img-responsive">
                                 <h3>01 ponto na P2</h3>
                             </div>
-
+                            <?php } ?>
                         </div>
                     </div>
                 </div>

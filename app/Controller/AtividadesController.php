@@ -339,7 +339,11 @@ Class AtividadesController extends AppController {
 		$this->set('atividade', $atividade);
 		if (!empty($respUser)) {
 			$this->set('finalizada', $respUser["RespoAlternativa"]["finalizada"]);
-		}
+		} else {
+			$finalizada = false;
+			$this->set('finalizada', $finalizada = false);
+        }
+
 	
 	}
 }
