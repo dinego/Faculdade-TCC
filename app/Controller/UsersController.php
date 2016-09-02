@@ -196,4 +196,57 @@ class UsersController extends AppController {
         $this->Flash->error(__('Usuário não deletado.'));
         $this->redirect(array('action' => 'index'));
     }
+
+    public function profile_edit()
+    {
+        $this->layout = 'dashboard';
+
+        $usuario = $this->User->findById($this->Auth->user("id"));
+        $this->Set('usuario', $usuario);
+        //var_dump($usuario);
+        //die();
+    }
+
+    public function resumo()
+    {
+        $this->layout = 'dashboard';
+
+        var_dump($this->getPontos($this->Auth->user('id')));
+        die();
+
+        $usuario = $this->User->findById($this->Auth->user("id"));
+        $this->Set('usuario', $usuario);
+    }
+
+    public function getPontos($user_id)
+    {
+        $this->loadModel('GrupoUser');
+        $this->loadModel('AcessoAtividade');
+        $this->loadModel('Premiacao');
+        $this->loadModel('RespoAlternativa');
+
+        $atividades_realizadas = $this->RespoAlternativa->find('all', array('conditions' => array('user_id' => $user_id, 'tentativa' => 1)));
+
+        foreach ($atividades_realizadas as $key => $realizadas) {
+            
+            $users_grupo = $this->GrupoUser->find('all', array('conditions' => array('GrupoUser.grupo_id' => $calcular['AcessoAtividade'][0]['grupo_id'])));
+            foreach ($users_grupo as $key2 => $grp) {
+                
+                $resp_grupo = $this->RespoAlternativa->find('first', array('conditions' => array('RespoAlternativa.atividade_id' => $calcular['Atividade']['id'], 'RespoAlternativa.user_id' => $grp['GrupoUser']['user_id'], 'RespoAlternativa.finalizada' => 1)));
+                
+                if (!empty($resp_grupo)) {
+
+                    $pontos = $this->Premiacao->findById($calcular['Atividade']['premiacaos_id']);
+                    
+                    @$ativi_realizadas[$key]['pontos_realizados'] += $pontos['Premiacao']['pontos_individuais'];
+                    
+                    $ativi_realizadas[$key]['porcentagem'] = ($ativi_realizadas[$key]['pontos_realizados'] * 100) / $pontos['Premiacao']['pontos_final'];
+                    $ativi_realizadas[$key]['premio'] = $pontos;
+                    if ($ativi_realizadas[$key]['porcentagem'] >= 100) {
+                        $premiacao_user[$key] = $pontos['Premiacao'];
+                    }
+                }
+            }
+        }
+    }
 }

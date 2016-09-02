@@ -343,7 +343,5 @@ Class AtividadesController extends AppController {
 			$finalizada = false;
 			$this->set('finalizada', $finalizada = false);
         }
-
-	
 	}
 }
