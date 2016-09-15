@@ -21,58 +21,50 @@
     </div>
     <div class="container">
         <div class="row pad-40">
-            <div class="col-sm-4">
-                <div class="sidebar-nav">
-                    <div class="navbar navbar-default" role="navigation">
-                        <div class="navbar-header">
-                            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-navbar-collapse">
-                                <span class="sr-only">Toggle navigation</span>
-                                <span class="icon-bar"></span>
-                                <span class="icon-bar"></span>
-                                <span class="icon-bar"></span>
-                            </button>
-                            <span class="visible-xs navbar-brand">Mudar informações</span>
-                        </div>
-                        <div class="navbar-collapse collapse sidebar-navbar-collapse">
-                            <ul class="nav navbar-nav">
-                                <li><a href="configuracoes.html"><span class="ti-angle-right"></span> Informações básicas</a></li>
-                                <li><a href="mudarSenha.html"><span class="ti-angle-right"></span> Mudar senha</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
+            
             <div class="col-sm-8">
-                <form class="form-inline">
-                    <div class="form-group mar-r-30">
-                        <img src="<?php echo $this->webroot . 'fotos/' . $usuario['User']['id'] . '/' . $usuario['User']['foto'] ?>" width="150" height="150" class="rounded">
-                    </div>
+                <div class="form-group mar-r-30">
+                <?php 
+                    if (!empty($usuario['User']['foto'])) {
+                ?>
+                    <img src="<?php echo $this->webroot . 'fotos/' . $usuario['User']['id'] . '/' . $usuario['User']['foto'] ?>" width="150" height="150" class="rounded">
+                <?php } else { ?>
+                    <img src="http://fakeimg.pl/120x120/?text=SEMFOTO" class="rounded">
+                <?php } ?>
+                </div>      
                 
-                    <button type="submit" class="btn btn-success">Selecionar foto</button>
-      
-                </form>
 
-                <form>
+                <?php echo $this->Form->create('User', array("enctype" => "multipart/form-data", 'url' => 'profile_edit')); ?>
                 
                     <h3>Suas Informações</h3>
+                    <p>Para visualizar as mudanças feitas aqui, faça logout e entre novamente.</p>
+                    <hr />
                     <div class="form-group">
-                        <label for="nome">Seu nome</label>
-                        <input type="text" class="form-control" id="nome" value="<?php echo $usuario['User']['nome'] ?>">
+                        <?php echo $this->Form->input('foto_user', array("class" => "form-control", "label" => "Selecione outra foto para alterar sua foto de perfil", 'type' => 'file')); ?>
+                    </div>
+                    <div class="form-group">
+                        <?php 
+                        echo $this->Form->input('id', array('type' => 'hidden'));
+                        echo $this->Form->input('nome', array('class' => 'form-control', 'label' => 'Seu nome')); 
+                        ?>
+
                     </div>
 
                     <div class="form-group">
-                        <label for="email">E-mail de acesso</label>
-                        <input type="text" class="form-control" id="email" value="<?php echo $usuario['User']['username'] ?>">
+                        <?php echo $this->Form->input('username', array('class' => 'form-control', 'label' => 'E-mail de acesso')); ?>
+                    </div>
+
+                    <div class="form-group">
+                        <?php echo $this->Form->input('password', array('class' => 'form-control', 'label' => 'Senha')); ?>
                     </div>
 
                     <div class="form-group">
                         <label for="usuario">RA</label>
-                        <input type="text" class="form-control" id="usuario">
+                        <input type="text" class="form-control" id="usuario" value="<?php echo $usuario['User']['ra'] ?>" disabled>
                     </div>
 
                     <button type="submit" class="btn btn-success">Atualizar perfil</button>
-                </form>
+                <?php echo $this->Form->end(); ?>
             </div>
         </div>
     </div>
