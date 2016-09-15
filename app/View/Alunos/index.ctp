@@ -61,7 +61,7 @@
                                         <div class="content">
                                             <span class="icon ti-pencil"></span>
                                             <div class="professor">
-                                                <img src="<?php echo $this->webroot . "/fotos/" . $ativa['User']['id'] . "/" . $ativa['User']['foto']; ?>" width="40" height="40"> Por: <?php echo $ativa['User']['nome']; ?></div>
+                                                <img src="<?php echo $this->webroot . "fotos/" . $ativa['User']['id'] . "/" . $ativa['User']['foto']; ?>" width="40" height="40"> Por: <?php echo $ativa['User']['nome']; ?></div>
                                             <div class="col-xs-10 col-md-10">
                                                 <div class="titulo"><?php echo $ativa['Atividade']['titulo']; ?></div>
                                                 <hr />
@@ -91,7 +91,7 @@
                                         <div class="content">
                                             <span class="icon ti-pencil"></span>
                                             <div class="professor">
-                                                <img src="<?php echo $this->webroot . "/fotos/" . $realizadas['User']['id'] . "/" . $realizadas['User']['foto']; ?>" width="40" height="40"> Por: <?php echo $realizadas['User']['nome']; ?></div>
+                                                <img src="<?php echo $this->webroot . "fotos/" . $realizadas['User']['id'] . "/" . $realizadas['User']['foto']; ?>" width="40" height="40"> Por: <?php echo $realizadas['User']['nome']; ?></div>
                                             <div class="col-xs-10 col-md-10">
                                                 <div class="titulo"><?php echo $realizadas['Atividade']['titulo']; ?></div>
                                             </div>
