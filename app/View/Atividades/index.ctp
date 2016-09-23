@@ -61,6 +61,11 @@
 									?>
 								</td>
 								<td>
+									<?php
+										if ($atividade['Atividade']['tipo_atividade'] == 1) { 
+									?>
+									<a href="<?php echo $this->Html->url(array('controller' => 'atividades', 'action' => 'respostas', $atividade['Atividade']['id'])) ?>" class="btn btn-warning">Avaliar respostas</a>
+									<?php } ?>
 									<a href="<?php echo $this->Html->url(array('controller' => 'atividades', 'action' => 'edit', $atividade['Atividade']['id'])) ?>" class="btn btn-primary">Editar</a>
 
 									<a href="<?php echo $this->Html->url(array('controller' => 'atividades', 'action' => 'desativar', $atividade['Atividade']['id'])) ?>" class="btn btn-default">Desativar</a>

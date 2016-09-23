@@ -30,21 +30,25 @@ class UsersController extends AppController {
 
     public function index() {
 
-        parent::isAuthorized($this->Auth->user());
+        if (!empty($this->Auth->user('id'))) {
+            parent::isAuthorized($this->Auth->user());
 
-        $this->User->recursive = 0;
-        $options = array(
-            'conditions' => array('User.active' => 'true'),
-            'order' => array('User.created' => 'DESC'),
-            'limit' => 10,
-            'group' => 'User.id'
-        );
+            $this->User->recursive = 0;
+            $options = array(
+                'conditions' => array('User.active' => 'true'),
+                'order' => array('User.created' => 'DESC'),
+                'limit' => 10,
+                'group' => 'User.id'
+            );
 
-        $this->paginate = $options;
-        // Roda a consulta, já trazendo os resultados paginados
-        $users = $this->paginate('User');
-        // Envia os dados pra view
-        $this->set('users', $users);
+            $this->paginate = $options;
+            // Roda a consulta, já trazendo os resultados paginados
+            $users = $this->paginate('User');
+            // Envia os dados pra view
+            $this->set('users', $users);
+        } else {
+            $this->redirect(array('action' => 'login'));
+        }
     }
 
     public function cadastro() {

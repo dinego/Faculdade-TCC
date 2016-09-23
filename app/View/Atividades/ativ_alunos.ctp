@@ -26,7 +26,7 @@
             <?php
                 foreach ($atividades as $key => $ativ) {
             ?>
-                <tr style="cursor:pointer" onclick="location.href='<?php echo $this->Html->url(array('controller' => 'atividades', 'action' => 'atividade', $ativ['Atividade']['id'])) ?>'">
+                <tr style="cursor:pointer" onclick="location.href='<?php echo $this->Html->url(array("controller" => "atividades", "action" => "atividade", $ativ["Atividade"]["id"])); ?>'">
                     <td><img src="<?php echo $this->webroot . "fotos/" . $ativ['User']['id'] . "/premios/" . $ativ['Premiacao']['id'] . "/" . $ativ['Premiacao']['foto_premio'] ?>" class="img-circle" width="35" height="35" /></td>
                     <td><?php echo $ativ['Atividade']['titulo'] ?></td>
                     <td><?php echo $ativ['Premiacao']['titulo'] ?></td>
@@ -34,7 +34,7 @@
                     <td><?php echo $ativ['Premiacao']['pontos_individuais'] ?></td>
                 </tr>
             <?php
-                } 
+                }
             ?>
             </table>
         </div>

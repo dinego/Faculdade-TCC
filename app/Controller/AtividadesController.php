@@ -4,7 +4,7 @@ Class AtividadesController extends AppController {
 
 	public function isAuthorized($user) {
         if (parent::isAuthorized($user)) {
-            if (in_array($this->action, array('edit', 'delete', 'add', 'desativar'))) {
+            if (in_array($this->action, array('edit', 'delete', 'add', 'desativar', 'respostas'))) {
                 $id = (int) $this->request->params['pass'];
                 return $this->Atividade->isOwnedBy($id, $user['id']);
             } else if (in_array($this->action, array('ativ_alunos', 'atividade'))) {
@@ -109,8 +109,10 @@ Class AtividadesController extends AppController {
 
 	            $this->request->data['Atividade']['user_id'] = $user['id'];
 
-	            $alternativaCorreta = $this->request->data["RespostaAtividade"]["alternativa_id"];
-	            $this->request->data['Alternativa'][$alternativaCorreta]['correta'] = 1;
+	            if ($this->request->data['Atividade']['tipo_atividade'] == 1) {
+		            $alternativaCorreta = $this->request->data["RespostaAtividade"]["alternativa_id"];
+		            $this->request->data['Alternativa'][$alternativaCorreta]['correta'] = 1;
+	            }
 
 	            if ($this->Atividade->saveAll($this->request->data)) {
 
@@ -252,34 +254,63 @@ Class AtividadesController extends AppController {
 		$this->set('atividades', $atividades);
 	}
 
+	public function respostas($id = null)
+	{
+		$this->set('atividade', $this->Atividade->findById($id));
+
+		$this->loadModel('RespoDissertativa');
+		$this->loadModel('User');
+
+		$respostas = $this->RespoDissertativa->find('all', array('conditions' => array('atividade_id' => $id)));
+		$respUsers = array();
+		foreach ($respostas as $key => $resp) {
+			$user = $this->User->findById($resp["RespoDissertativa"]["user_id"]);
+			$respUsers[$key]['User'] = $user["User"];
+			$respUsers[$key]['RespoDissertativa'] = $resp["RespoDissertativa"];
+		}
+
+		$this->set('respUsers', $respUsers);
+	}
+
 	public function atividade($id = null)
 	{
 		$this->layout = 'dashboard';
 		
 		$atividade = $this->Atividade->findById($id);
+		
 		$this->loadModel('Alternativa');
-		$this->loadModel('RespoAlternativa');		
+		$this->loadModel('RespoAlternativa');
+		$this->loadModel('RespoDissertativa');		
 					
+		$prove = $this->RespoDissertativa->find('first', array('conditions' => array('user_id' => $this->Auth->user('id'), 'atividade_id' => $atividade['Atividade']['id'])));
+
+		$this->set('prove', $prove);
+
 		$respUser = $this->RespoAlternativa->find('first', array('conditions' => array('RespoAlternativa.atividade_id' => $id, 'RespoAlternativa.user_id' => $this->Auth->user('id'))));
 		
 		if ($this->request->is('post')) {
 
-			$alternativa = $this->Alternativa->findById($this->request->data['Alternativa']['alternativa']);
 
 			if (!empty($respUser) && $respUser['RespoAlternativa']['finalizada'] == false) {
 				$this->RespoAlternativa->id = $respUser['RespoAlternativa']['id'];
 
 				if ($atividade['Atividade']['tipo_atividade'] == 1) {
-					$this->request->data['RespoDissertativa']['user_id'] = $this->Auth->user('id');
-					$this->request->data['RespoDissertativa']['atividade_id'] = $id;
+					if (!empty($prove)) {
+						$this->request->data['RespoDissertativa']['user_id'] = $this->Auth->user('id');
+						$this->request->data['RespoDissertativa']['atividade_id'] = $id;
 
-					if ($this->RespoDissertativa->save($this->request->data)) {							
-						$this->Flash->success(__('Parabens, cadastramos a sua resposta, aguarde o professor avaliá-la.'));
-						$this->redirect(array('controller' => 'atividades', 'action' => 'ativ_alunos'));	
+						if ($this->RespoDissertativa->save($this->request->data)) {							
+							$this->Flash->success(__('Parabens, cadastramos a sua resposta, aguarde o professor avaliá-la.'));
+							$this->redirect(array('controller' => 'atividades', 'action' => 'ativ_alunos'));	
+						}
+					} else {
+						$this->Flash->error(__('Você já respondeu a essa atividade.'));
+						$this->redirect(array('controller' => 'atividades', 'action' => 'ativ_alunos'));
 					}
 				}
 
 				if ($respUser['RespoAlternativa']['tentativas_restantes'] > 0) {
+					$alternativa = $this->Alternativa->findById($this->request->data['Alternativa']['alternativa']);
 
 					if ($alternativa['Alternativa']['correta'] == true) {
 

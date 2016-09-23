@@ -40,7 +40,14 @@
                             Faltam  <?php echo $intervalo->m . " Meses e " . $intervalo->d; ?> dias para encerrar</div>
                         </div>
                         <div class="col-sm-5 text-right">
-                            <div class="pontos">Pontos de recompensa: <?php echo $atividade['Premiacao']['pontos_individuais'] ?></div>
+                            <div class="pontos">Acerto: 
+                            <?php
+                                if ($atividade['Atividade']['tipo_atividade'] == 1) {
+                                    echo "Pontos Avaliativos (não definido)";
+                                } else {
+                                    echo $atividade['Premiacao']['pontos_individuais'] . "Pontos";                           
+                                }
+                            ?></div>
                         </div>
                         <div class="col-sm-12">
 
@@ -93,7 +100,9 @@
                             <?php
                                 } else {
                                     echo $this->Form->create('RespoDissertativa');
-                                    echo $this->Form->input('RespoDissertativa.resposta', array('type' => 'textarea'));
+                                    echo $this->Form->input('RespoDissertativa.resposta', array('type' => 'textarea', 'class' => 'form-control', 'div' => array('class' => 'form-group')));
+
+                                    if (!empty($prove)) { $finalizada = true; }
                                 }
                                 if ($finalizada == false) {
                             ?>
