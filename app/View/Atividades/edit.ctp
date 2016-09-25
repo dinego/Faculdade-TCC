@@ -32,7 +32,7 @@
 							<label class="control-label col-md-3 col-sm-3 col-xs-12" for="descricao">Tipo da atividade <span class="required">*</span>
 							</label>
 							<div class="col-md-6 col-sm-6 col-xs-12">
-								<?php echo $this->Form->input('Atividade.tipo_atividade', array("class" => "col-md-6 col-xs-12 form-control", "label" => false, 'options' => array("" => '-- Selecione --', 1 => 'Alternativa', 2 => 'Dissertativa'))); ?>
+								<?php echo $this->Form->input('Atividade.tipo_atividade', array("class" => "col-md-6 col-xs-12 form-control", "label" => false, 'options' => array("" => '-- Selecione --', 1 => 'Dissertativa', 2 => 'Alternativa'))); ?>
 							</div>
 						</div>
 
@@ -40,7 +40,7 @@
 							<label class="control-label col-md-3 col-sm-3 col-xs-12" for="rangeData">Período de tempo (de - até) <span class="required">*</span>
 							</label>
 							<div class="col-md-6 col-sm-6 col-xs-12">
-								<?php echo $this->Form->input('rangeData', array('class' => 'form-control', 'value' => '01/05/2016 - 01/06/2016', 'id' => 'reservation', 'label' => false)) ?>
+								<?php echo $this->Form->input('rangeData', array('class' => 'form-control', 'id' => 'reservation', 'label' => false)) ?>
 							</div>
 						</div>
 
@@ -82,7 +82,7 @@
 
 						<script type="text/javascript">
 							$("#AtividadeTipoAtividade").on('change', function (){ 
-								if ($(this).val() == 2) {
+								if ($(this).val() == 1) {
 									$("#alternativas").hide();
 								} else {
 									$("#alternativas").show();
@@ -101,7 +101,9 @@
 							</div>
 
 							<?php 
+								if (!empty($alternativas)) {
 								foreach ($alternativas as $key => $alternativa) {
+							
 							?>
 
 								<div class="form-group">
@@ -119,6 +121,15 @@
 
 							<?php
 								}
+								} else {
+
+							?>
+								<script type="text/javascript">
+									$("#alternativas").html("");
+									$("#alternativas").html("<div class=\"ln_solid\"></div><div class=\"form-group\"><label class=\"control-label col-md-3 col-sm-3 col-xs-12\"></label><div class=\"col-md-6 col-sm-6 col-xs-12\">Alternativa</div><div class=\"col-md-2 col-sm-12 col-xs-12\">Resposta Certa</div></div>     <div class=\"form-group\"><label class=\"control-label col-md-3 col-sm-3 col-xs-12\" for=\"descricao\">1</label><div class=\"col-md-6 col-sm-6 col-xs-12\"><div class=\"input text\"><input name=\"data[Alternativa][1][alternativa]\" class=\"col-md-12 col-xs-12 form-control\" maxlength=\"255\" type=\"text\" id=\"Alternativa1Alternativa\"></div></div><div class=\"col-md-1 col-sm-12 col-xs-12\"><input name=\"data[RespostaAtividade][alternativa_id]\" class=\"col-md-12 col-xs-12 form-control\" maxlength=\"1\" type=\"radio\" value=\"1\"></div></div>     <div class=\"form-group\"><label class=\"control-label col-md-3 col-sm-3 col-xs-12\" for=\"descricao\">2</label><div class=\"col-md-6 col-sm-6 col-xs-12\"><div class=\"input text\"><input name=\"data[Alternativa][2][alternativa]\" class=\"col-md-12 col-xs-12 form-control\" maxlength=\"255\" type=\"text\" id=\"Alternativa1Alternativa\"></div></div><div class=\"col-md-1 col-sm-12 col-xs-12\"><div class=\"input text\"><input name=\"data[RespostaAtividade][alternativa_id]\" class=\"col-md-12 col-xs-12 form-control\" maxlength=\"1\" type=\"radio\" value=\"2\"></div></div></div>	<div class=\"form-group\"><label class=\"control-label col-md-3 col-sm-3 col-xs-12\" for=\"descricao\">3</label><div class=\"col-md-6 col-sm-6 col-xs-12\"><div class=\"input text\"><input name=\"data[Alternativa][3][alternativa]\" class=\"col-md-12 col-xs-12 form-control\" maxlength=\"255\" type=\"text\" id=\"Alternativa1Alternativa\"></div></div><div class=\"col-md-1 col-sm-12 col-xs-12\"><div class=\"input text\"><input name=\"data[RespostaAtividade][alternativa_id]\" class=\"col-md-12 col-xs-12 form-control\" maxlength=\"1\" type=\"radio\" value=\"3\"></div></div></div>	<div class=\"form-group\"><label class=\"control-label col-md-3 col-sm-3 col-xs-12\" for=\"descricao\">4</label><div class=\"col-md-6 col-sm-6 col-xs-12\"><div class=\"input text\"><input name=\"data[Alternativa][4][alternativa]\" class=\"col-md-12 col-xs-12 form-control\" maxlength=\"255\" type=\"text\" id=\"Alternativa1Alternativa\"></div></div><div class=\"col-md-1 col-sm-12 col-xs-12\"><div class=\"input text\"><input name=\"data[RespostaAtividade][alternativa_id]\" class=\"col-md-12 col-xs-12 form-control\" maxlength=\"1\" type=\"radio\" value=\"4\"></div></div></div>	<div class=\"form-group\"><label class=\"control-label col-md-3 col-sm-3 col-xs-12\" for=\"descricao\">5</label><div class=\"col-md-6 col-sm-6 col-xs-12\"><div class=\"input text\"><input name=\"data[Alternativa][5][alternativa]\" class=\"col-md-12 col-xs-12 form-control\" maxlength=\"255\" type=\"text\" id=\"Alternativa1Alternativa\"></div></div><div class=\"col-md-1 col-sm-12 col-xs-12\"><div class=\"input text\"><input name=\"data[RespostaAtividade][alternativa_id]\" class=\"col-md-12 col-xs-12 form-control\" maxlength=\"1\" type=\"radio\" value=\"5\"></div></div></div>");
+								</script>
+							<?php
+								}
 							?>
 						</div>
 
@@ -134,7 +145,7 @@
 						<div class="form-group">
 							<div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
 								<button onclick="history.back(-1)" class="btn btn-primary">Cancelar</button>
-								<button type="submit" class="btn btn-success">Cadastrar atividade</button>
+								<button type="submit" class="btn btn-success">Editar atividade</button>
 							</div>
 						</div>
 
