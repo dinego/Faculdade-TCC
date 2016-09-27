@@ -191,13 +191,42 @@ Class AtividadesController extends AppController {
 		$this->Atividade->id = $id;
 
 		if ($this->Atividade->isOwnedBy($id, $this->Auth->user('id'))) {
-			
-			$this->set('atividade', $this->Atividade->findById($id));
 
-			if ($this->request->is('post')) {
+			$this->loadModel('AcessoAtividade');
+			$this->loadModel('Grupo');
+
+			$todosGrupos = $this->Grupo->find('all', array('conditions' => array('user_id' => $this->Auth->user('id'))));
+			$grpAcesso = $this->AcessoAtividade->find('all', array('conditions' => array('atividade_id' => $id)));
+
+			$inativos = array();
+			$gruposAtivos = array();
+
+			foreach ($todosGrupos as $key => $todos) {
+				
+				
+				foreach ($grpAcesso as $key => $ativos) {
+					$inativos[$todos['Grupo']['id']] = $this->Grupo->findById($todos['Grupo']['id']);
+
+					$gruposAtivos[$ativos['AcessoAtividade']['grupo_id']] = $this->Grupo->findById($ativos['AcessoAtividade']['grupo_id']);
+
+				}
+			}
+
+			$this->set('inativos', array_diff($inativos, $gruposAtivos));
+			$this->set('ativos', $gruposAtivos);
+
+			
+			$this->loadModel('Grupo');
+			$grupos = $this->Grupo->find('all', array(
+	    		'conditions' => array('Grupo.user_id =' => $this->Auth->user('id')),
+	    		'fields'     => array('Grupo.id', 'Grupo.nome')
+	    	));
+			$this->set('grupos', $grupos);
+
+			$this->set('atividade', $this->Atividade->findById($id));
+			if ($this->request->is('post') || $this->request->is('put')) {
 				if (!empty($this->request->data['Atividade']['arquivo'])) {
 					if ($this->request->data['Atividade']['arquivo']['error'] != 4) {
-
 						$arquivo = $this->request->data['Atividade']['arquivo'];
 						// Tamanho máximo do arquivo (em Bytes)
 			            $_UP['tamanho'] = 2048 * 2048 * 2; // 2Mb
@@ -247,15 +276,15 @@ Class AtividadesController extends AppController {
 			        	$this->request->data['Atividade']['arquivo'] = "";
 			        }
 
-		            $this->request->data['Atividade']['user_id'] = $user['id'];
+		            $this->request->data['Atividade']['user_id'] = $this->Auth->user('id');
 
 		            if ($this->request->data['Atividade']['tipo_atividade'] == 2) {
 			            $alternativaCorreta = $this->request->data["RespostaAtividade"]["alternativa_id"];
 			            $this->request->data['Alternativa'][$alternativaCorreta]['correta'] = 1;
 		            }
 
-		            if ($this->Atividade->saveAll($this->request->data)) {
 
+		            if ($this->Atividade->saveAll($this->request->data)) {
 		            	if (!empty($this->request->data['Atividade']['arquivo'])) {
 			                $_UP['pasta'] = WWW_ROOT . "fotos/" . $user['id'] . "/atividades/auxiliar/" . $this->Atividade->id . "/";
 
@@ -267,13 +296,17 @@ Class AtividadesController extends AppController {
 			            }
 
 			            $this->loadModel('AcessoAtividade');
-						foreach ($this->request->data["Atividade"]["grupos"] as $key => $grupo) {
+			            
+		            	var_dump($this->request->data);
+		            	die();		            
+		            
+						foreach ($this->request->data["GruposAcesso"]["grupos"] as $key => $grupo) {
 							$this->AcessoAtividade->create();
 							$this->request->data['AcessoAtividade']['grupo_id'] = $grupo;
 							$this->request->data['AcessoAtividade']['atividade_id'] = $this->Atividade->id;
 							$this->AcessoAtividade->save($this->request->data);
 						}
-
+						
 		                $this->Flash->success(__('Atividade salva com Sucesso'));
 		                $this->redirect(array('action' => 'index'));
 		            } else {

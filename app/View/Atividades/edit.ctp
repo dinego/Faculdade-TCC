@@ -1,4 +1,30 @@
 <script src="//cdn.ckeditor.com/4.5.7/standard/ckeditor.js"></script>
+<script>
+	function addSelected(){
+		return !$('#todos option:selected').remove().appendTo('#gruposAcesso');
+	}
+	function addTodos(){
+		return !$('#todos option').remove().appendTo('#gruposAcesso');
+	}
+	function removeSelected(){
+		return !$('#gruposAcesso option:selected').remove().appendTo('#todos');
+	}
+	function removeTodos(){
+		return !$('#gruposAcesso option').remove().appendTo('#todos');
+	}
+	function addCSelected(){
+		return !$('#cfops option:selected').remove().appendTo('#ignorar');
+	}
+	function addCTodos(){
+		return !$('#cfops option').remove().appendTo('#ignorar');
+	}
+	function removeCSelected(){
+		return !$('#ignorar option:selected').remove().appendTo('#cfops');
+	}
+	function removeCTodos(){
+		return !$('#ignorar option').remove().appendTo('#cfops');
+	}
+</script>
 <div class="">
 	<div class="page-title">
 		<div class="title_left">
@@ -33,6 +59,7 @@
 							</label>
 							<div class="col-md-6 col-sm-6 col-xs-12">
 								<?php echo $this->Form->input('Atividade.tipo_atividade', array("class" => "col-md-6 col-xs-12 form-control", "label" => false, 'options' => array("" => '-- Selecione --', 1 => 'Dissertativa', 2 => 'Alternativa'))); ?>
+								<?php echo $this->Form->input('id', array("type" => "hidden")); ?>
 							</div>
 						</div>
 
@@ -86,6 +113,8 @@
 									$("#alternativas").hide();
 								} else {
 									$("#alternativas").show();
+									$("#alternativas").html("");
+										$("#alternativas").html("<div class=\"ln_solid\"></div><div class=\"form-group\"><label class=\"control-label col-md-3 col-sm-3 col-xs-12\"></label><div class=\"col-md-6 col-sm-6 col-xs-12\">Alternativa</div><div class=\"col-md-2 col-sm-12 col-xs-12\">Resposta Certa</div></div>     <div class=\"form-group\"><label class=\"control-label col-md-3 col-sm-3 col-xs-12\" for=\"descricao\">1</label><div class=\"col-md-6 col-sm-6 col-xs-12\"><div class=\"input text\"><input name=\"data[Alternativa][1][alternativa]\" class=\"col-md-12 col-xs-12 form-control\" maxlength=\"255\" type=\"text\" id=\"Alternativa1Alternativa\"></div></div><div class=\"col-md-1 col-sm-12 col-xs-12\"><input name=\"data[RespostaAtividade][alternativa_id]\" class=\"col-md-12 col-xs-12 form-control\" maxlength=\"1\" type=\"radio\" value=\"1\"></div></div>     <div class=\"form-group\"><label class=\"control-label col-md-3 col-sm-3 col-xs-12\" for=\"descricao\">2</label><div class=\"col-md-6 col-sm-6 col-xs-12\"><div class=\"input text\"><input name=\"data[Alternativa][2][alternativa]\" class=\"col-md-12 col-xs-12 form-control\" maxlength=\"255\" type=\"text\" id=\"Alternativa1Alternativa\"></div></div><div class=\"col-md-1 col-sm-12 col-xs-12\"><div class=\"input text\"><input name=\"data[RespostaAtividade][alternativa_id]\" class=\"col-md-12 col-xs-12 form-control\" maxlength=\"1\" type=\"radio\" value=\"2\"></div></div></div>	<div class=\"form-group\"><label class=\"control-label col-md-3 col-sm-3 col-xs-12\" for=\"descricao\">3</label><div class=\"col-md-6 col-sm-6 col-xs-12\"><div class=\"input text\"><input name=\"data[Alternativa][3][alternativa]\" class=\"col-md-12 col-xs-12 form-control\" maxlength=\"255\" type=\"text\" id=\"Alternativa1Alternativa\"></div></div><div class=\"col-md-1 col-sm-12 col-xs-12\"><div class=\"input text\"><input name=\"data[RespostaAtividade][alternativa_id]\" class=\"col-md-12 col-xs-12 form-control\" maxlength=\"1\" type=\"radio\" value=\"3\"></div></div></div>	<div class=\"form-group\"><label class=\"control-label col-md-3 col-sm-3 col-xs-12\" for=\"descricao\">4</label><div class=\"col-md-6 col-sm-6 col-xs-12\"><div class=\"input text\"><input name=\"data[Alternativa][4][alternativa]\" class=\"col-md-12 col-xs-12 form-control\" maxlength=\"255\" type=\"text\" id=\"Alternativa1Alternativa\"></div></div><div class=\"col-md-1 col-sm-12 col-xs-12\"><div class=\"input text\"><input name=\"data[RespostaAtividade][alternativa_id]\" class=\"col-md-12 col-xs-12 form-control\" maxlength=\"1\" type=\"radio\" value=\"4\"></div></div></div>	<div class=\"form-group\"><label class=\"control-label col-md-3 col-sm-3 col-xs-12\" for=\"descricao\">5</label><div class=\"col-md-6 col-sm-6 col-xs-12\"><div class=\"input text\"><input name=\"data[Alternativa][5][alternativa]\" class=\"col-md-12 col-xs-12 form-control\" maxlength=\"255\" type=\"text\" id=\"Alternativa1Alternativa\"></div></div><div class=\"col-md-1 col-sm-12 col-xs-12\"><div class=\"input text\"><input name=\"data[RespostaAtividade][alternativa_id]\" class=\"col-md-12 col-xs-12 form-control\" maxlength=\"1\" type=\"radio\" value=\"5\"></div></div></div>");
 								}
 							});
 
@@ -102,38 +131,67 @@
 
 							<?php 
 								if (!empty($alternativas)) {
-								foreach ($alternativas as $key => $alternativa) {
+									foreach ($alternativas as $key => $alternativa) {
 							
 							?>
 
-								<div class="form-group">
-									<label class="control-label col-md-3 col-sm-3 col-xs-12" for="descricao"><?php echo $key ?></label>
-									<div class="col-md-6 col-sm-6 col-xs-12">
-										<div class="input text">
-											<input value="<?php echo $alternativa['Alternativa']['alternativa']; ?>" name="data[Alternativa][<?php echo $key; ?>][alternativa]" class="col-md-12 col-xs-12 form-control" maxlength="255" type="text" id="Alternativa<?php echo $key; ?>Alternativa">
-										</div>
-									</div>
+										<div class="form-group">
+											<label class="control-label col-md-3 col-sm-3 col-xs-12" for="descricao"><?php echo $key ?></label>
+											<div class="col-md-6 col-sm-6 col-xs-12">
+												<div class="input text">
+													<input value="<?php echo $alternativa['Alternativa']['alternativa']; ?>" name="data[Alternativa][<?php echo $key; ?>][alternativa]" class="col-md-12 col-xs-12 form-control" maxlength="255" type="text" id="Alternativa<?php echo $key; ?>Alternativa">
+												</div>
+											</div>
 
-									<div class="col-md-1 col-sm-12 col-xs-12">
-										<input name="data[RespostaAtividade][alternativa_id]" class="col-md-12 col-xs-12 form-control" maxlength="1" type="radio" value="<?php echo $key; ?>">
-									</div>
-								</div>
+											<div class="col-md-1 col-sm-12 col-xs-12">
+												<input name="data[RespostaAtividade][alternativa_id]" class="col-md-12 col-xs-12 form-control" maxlength="1" type="radio" value="<?php echo $key; ?>">
+											</div>
+										</div>
 
 							<?php
-								}
+									}
 								} else {
 
 							?>
-								<script type="text/javascript">
-									$("#alternativas").html("");
-									$("#alternativas").html("<div class=\"ln_solid\"></div><div class=\"form-group\"><label class=\"control-label col-md-3 col-sm-3 col-xs-12\"></label><div class=\"col-md-6 col-sm-6 col-xs-12\">Alternativa</div><div class=\"col-md-2 col-sm-12 col-xs-12\">Resposta Certa</div></div>     <div class=\"form-group\"><label class=\"control-label col-md-3 col-sm-3 col-xs-12\" for=\"descricao\">1</label><div class=\"col-md-6 col-sm-6 col-xs-12\"><div class=\"input text\"><input name=\"data[Alternativa][1][alternativa]\" class=\"col-md-12 col-xs-12 form-control\" maxlength=\"255\" type=\"text\" id=\"Alternativa1Alternativa\"></div></div><div class=\"col-md-1 col-sm-12 col-xs-12\"><input name=\"data[RespostaAtividade][alternativa_id]\" class=\"col-md-12 col-xs-12 form-control\" maxlength=\"1\" type=\"radio\" value=\"1\"></div></div>     <div class=\"form-group\"><label class=\"control-label col-md-3 col-sm-3 col-xs-12\" for=\"descricao\">2</label><div class=\"col-md-6 col-sm-6 col-xs-12\"><div class=\"input text\"><input name=\"data[Alternativa][2][alternativa]\" class=\"col-md-12 col-xs-12 form-control\" maxlength=\"255\" type=\"text\" id=\"Alternativa1Alternativa\"></div></div><div class=\"col-md-1 col-sm-12 col-xs-12\"><div class=\"input text\"><input name=\"data[RespostaAtividade][alternativa_id]\" class=\"col-md-12 col-xs-12 form-control\" maxlength=\"1\" type=\"radio\" value=\"2\"></div></div></div>	<div class=\"form-group\"><label class=\"control-label col-md-3 col-sm-3 col-xs-12\" for=\"descricao\">3</label><div class=\"col-md-6 col-sm-6 col-xs-12\"><div class=\"input text\"><input name=\"data[Alternativa][3][alternativa]\" class=\"col-md-12 col-xs-12 form-control\" maxlength=\"255\" type=\"text\" id=\"Alternativa1Alternativa\"></div></div><div class=\"col-md-1 col-sm-12 col-xs-12\"><div class=\"input text\"><input name=\"data[RespostaAtividade][alternativa_id]\" class=\"col-md-12 col-xs-12 form-control\" maxlength=\"1\" type=\"radio\" value=\"3\"></div></div></div>	<div class=\"form-group\"><label class=\"control-label col-md-3 col-sm-3 col-xs-12\" for=\"descricao\">4</label><div class=\"col-md-6 col-sm-6 col-xs-12\"><div class=\"input text\"><input name=\"data[Alternativa][4][alternativa]\" class=\"col-md-12 col-xs-12 form-control\" maxlength=\"255\" type=\"text\" id=\"Alternativa1Alternativa\"></div></div><div class=\"col-md-1 col-sm-12 col-xs-12\"><div class=\"input text\"><input name=\"data[RespostaAtividade][alternativa_id]\" class=\"col-md-12 col-xs-12 form-control\" maxlength=\"1\" type=\"radio\" value=\"4\"></div></div></div>	<div class=\"form-group\"><label class=\"control-label col-md-3 col-sm-3 col-xs-12\" for=\"descricao\">5</label><div class=\"col-md-6 col-sm-6 col-xs-12\"><div class=\"input text\"><input name=\"data[Alternativa][5][alternativa]\" class=\"col-md-12 col-xs-12 form-control\" maxlength=\"255\" type=\"text\" id=\"Alternativa1Alternativa\"></div></div><div class=\"col-md-1 col-sm-12 col-xs-12\"><div class=\"input text\"><input name=\"data[RespostaAtividade][alternativa_id]\" class=\"col-md-12 col-xs-12 form-control\" maxlength=\"1\" type=\"radio\" value=\"5\"></div></div></div>");
-								</script>
+									<script type="text/javascript">
+										
+									</script>
 							<?php
 								}
 							?>
 						</div>
 
+						<h2>Grupos de acesso</h2>
+						<div class="col-md-4 form-group">
+							<select id="todos" multiple size="10" class="form-control">
+								<?php
+									$i = 0;
+									foreach ($inativos as $group) {
+										$i++;
+								?>
+									<option value="<?php echo $group['Grupo']['id'] ?>"><?php echo $i.' - '.$group['Grupo']['nome'] ?></option>
+								<?php } ?>
+							</select>
+						</div>
+						<div class="col-md-3 form-group">
+								<button class="btn form-control" onClick="addSelected(); return false;">Adicionar >></button>
+								<button class="btn form-control" onClick="addTodos(); return false;">Adicionar Todos >></button>
+								<button class="btn form-control" onClick="removeSelected(); return false;">Remover <<</button>
+								<button class="btn form-control" onClick="removeTodos(); return false;">Remover Todos <<</button>
+						</div>
+						<div class="col-md-4 form-group">
+							<select id="gruposAcesso" name="data[GruposAcesso][grupos]" multiple size="10" class="form-control">
+								<?php
 
+									$i = 0;
+									foreach ($ativos as $grupos2) {
+										$i++;
+								?>
+									<option value="<?php echo $grupos2['Grupo']['id'] ?>"><?php echo $grupos2['Grupo']['id'] . ' - ' . $grupos2['Grupo']['nome'] ?></option>
+								<?php } ?>
+							</select>
+						</div>
+						
 						<!--<div class="form-group">
 							<label class="control-label col-md-3 col-sm-3 col-xs-12">Date Of Birth <span class="required">*</span>
 							</label>
