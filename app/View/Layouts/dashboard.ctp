@@ -59,7 +59,7 @@
                             ?>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href="<?php echo $this->Html->url(array('controller' => 'users', 'action' => 'profile_edit')) ?>">Configurações</a></li>
+                            <li><a href="<?php echo $this->Html->url(array('controller' => 'users', 'action' => 'profile_edit')) ?>">Alterar meus dados</a></li>
                             <li><a href="<?php echo $this->Html->url(array('controller' => 'users', 'action' => 'resumo')) ?>">Meu resumo</a></li>
                             <li><a href="<?php echo $this->Html->url(array('controller' => 'users', 'action' => 'logout')) ?>">Sair</a></li>
                         </ul>

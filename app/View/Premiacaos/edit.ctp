@@ -50,7 +50,7 @@
 							(Deixe em branco para não editar)
 							</label>
 							<div class="col-md-6 col-sm-6 col-xs-12">
-								<?php echo $this->Form->input('foto_premio', array("class" => "col-md-7 col-xs-12", "label" => false, 'type' => 'file', 'required')); ?>
+								<?php echo $this->Form->input('foto_premio', array("class" => "col-md-7 col-xs-12", "label" => false, 'type' => 'file')); ?>
 								<?php echo '<img src="' . $fotoPremio . '"	 class="img-circle" height="60" width="60">'; ?>
 							</div>
 						</div>

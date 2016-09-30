@@ -51,7 +51,7 @@
 				</div>
 				<div class="x_content">
 					<br />
-					<?php echo $this->Form->create('Atividade', array("data-parsley-validate" => null, "class" => "form-horizontal form-label-left", "enctype" => "multipart/form-data")); ?>
+					<?php echo $this->Form->create('Atividade', array("data-parsley-validate" => null, "class" => "form-horizontal form-label-left", "enctype" => "multipart/form-data", 'onSubmit' => "$('#gruposAcesso option').prop('selected', 'selected');")); ?>
 
 
 						<div class="form-group">
@@ -132,9 +132,7 @@
 							<?php 
 								if (!empty($alternativas)) {
 									foreach ($alternativas as $key => $alternativa) {
-							
 							?>
-
 										<div class="form-group">
 											<label class="control-label col-md-3 col-sm-3 col-xs-12" for="descricao"><?php echo $key ?></label>
 											<div class="col-md-6 col-sm-6 col-xs-12">
@@ -143,20 +141,13 @@
 												</div>
 											</div>
 
-											<div class="col-md-1 col-sm-12 col-xs-12">
-												<input name="data[RespostaAtividade][alternativa_id]" class="col-md-12 col-xs-12 form-control" maxlength="1" type="radio" value="<?php echo $key; ?>">
+											<div class="col-md-1 col-sm-12 col-xs-12">												
+													<input name="data[RespostaAtividade][alternativa_id]" <?php if ($alternativa['Alternativa']['correta'] == true) { echo "checked='checked'"; } ?> class="col-md-12 col-xs-12 form-control" maxlength="1" type="radio" value="<?php echo $key; ?>">
 											</div>
 										</div>
 
 							<?php
 									}
-								} else {
-
-							?>
-									<script type="text/javascript">
-										
-									</script>
-							<?php
 								}
 							?>
 						</div>
@@ -180,7 +171,7 @@
 								<button class="btn form-control" onClick="removeTodos(); return false;">Remover Todos <<</button>
 						</div>
 						<div class="col-md-4 form-group">
-							<select id="gruposAcesso" name="data[GruposAcesso][grupos]" multiple size="10" class="form-control">
+							<select id="gruposAcesso" name="data[GruposAcesso][grupos][]" multiple size="10" class="form-control">
 								<?php
 
 									$i = 0;

@@ -58,6 +58,7 @@ class UsersController extends AppController {
                 $this->Flash->success(__('Solicitação feita! Aguarde até algum professor liberar seu acesso!'));
                 $this->redirect(array('action' => 'login'));
             } else {
+                $this->redirect(array('action' => 'login'));
                 $this->Flash->error(__('Usuário não cadastrado. Tente novamente mais tarde.'));
             }
         }

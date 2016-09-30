@@ -1,4 +1,3 @@
-
 <script src="//cdn.ckeditor.com/4.5.7/standard/ckeditor.js"></script>
 <script>
 	function addSelected(){

@@ -1,9 +1,7 @@
 <?php 
 
 // app/Controller/UsersController.php
-class AlunosController extends AppController {
-
-    
+class AlunosController extends AppController {    
 
     public function beforeFilter() {
         parent::beforeFilter();
@@ -18,6 +16,10 @@ class AlunosController extends AppController {
 
         $this->loadModel('Atividade');
         $this->loadModel('RespoAlternativa');
+        $this->loadModel('RespoDissertativa');
+        $this->loadModel('GrupoUser');
+        $this->loadModel('AcessoAtividade');
+        $this->loadModel('Premiacao');
 
         $atividades_ativas = $this->RespoAlternativa->find('all', array('conditions' => array('RespoAlternativa.tentativas_restantes >' => '0', 'RespoAlternativa.finalizada =' => '0', 'user_id' => $this->Auth->user('id'))));
 
@@ -26,9 +28,50 @@ class AlunosController extends AppController {
         $ativi_ativas = array();
         $ativi_realizadas = array();
 
-        $this->loadModel('GrupoUser');
-        $this->loadModel('AcessoAtividade');
-        $this->loadModel('Premiacao');
+
+        /*
+        Calculando se o usuário tem alguma premiação
+        */
+
+        $premiacoes = array();
+        $atividades_home = array();
+        $grupos = $this->GrupoUser->find('all', array('conditions' => array('GrupoUser.user_id' => $this->Auth->user('id'))));
+        foreach ($grupos as $key => $grupo) {
+            $accsAtividades = $this->AcessoAtividade->find('all', array('conditions' => array('AcessoAtividade.grupo_id' => $grupo['Grupo']['id'])));
+            foreach ($accsAtividades as $key2 => $ativ) {
+                $pontosTotalAtiv = 0;
+                $pts_inds = "";
+                
+                if ($ativ['Atividade']['tipo_atividade'] == 1) {
+                    
+                    $pts_inds = $this->RespoDissertativa->find('all', array('conditions' => array('RespoDissertativa.atividade_id' => $ativ['Atividade']['id'], 'RespoDissertativa.pontos !=' => "")));
+
+                    foreach ($pts_inds as $key3 => $value) {
+                        $pontosTotalAtiv += $value['RespoDissertativa']['pontos'];
+                    }
+
+                } else {
+                    $pts_inds = $this->RespoAlternativa->find('all', array('conditions' => array('RespoAlternativa.atividade_id' => $ativ['Atividade']['id'], 'RespoAlternativa.finalizada' => 1)));
+                    foreach ($pts_inds as $key4 => $value) {
+                        $pontosTotalAtiv += $ativ['Premiacao']['pontos_individuais'];
+                    }
+                }
+
+                $prem = $this->Premiacao->findById($ativ['Atividade']['premiacaos_id']);
+
+                if ($pontosTotalAtiv >= $prem['Premiacao']['pontos_final']) {
+                    $premiacoes[$key] = $prem['Premiacao'];
+                } else {
+                    $atividades_home[$key2]['Atividade'] = $ativ;
+                    $atividades_home[$key2]['Premiacao'] = $prem['Premiacao'];
+                    $atividades_home[$key2]['porcentagem'] = ($pontosTotalAtiv * 100) / $prem['Premiacao']['pontos_final'];
+                }
+            }
+        }
+
+        $this->set('atividades_home', $atividades_home);
+        $this->set('premiacoes', $premiacoes);
+        /****************************************************/
         
         $pontos_atividade = 0;
         $k = 0;

@@ -9,30 +9,30 @@
                     </div>
 
                     <?php 
-                    if (!empty($ativi_realizadas) && !empty($ativi_realizadas[0]['porcentagem'])) {
+                    if (!empty($atividades_home)) {
                     ?>
                         <div class="progress">
-                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $ativi_realizadas[0]['porcentagem']; ?>%">
-                                <span class="sr-only"><?php echo $ativi_realizadas[0]['porcentagem']; ?>% <span class="ti-face-smile"></span></span>
+                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $atividades_home[0]['porcentagem']; ?>%">
+                                <span class="sr-only"><?php echo number_format($atividades_home[0]['porcentagem'], 1, ',', ''); ?>% <span class="ti-face-smile"></span></span>
                             </div>
                         </div>
                         <h3 class="premio text-center">
                             <?php
-                                if ($ativi_realizadas[0]['porcentagem'] < 25) {
+                                if ($atividades_home[0]['porcentagem'] < 25) {
                                     echo "Vocês precisam se esforçar um pouco mais para conseguir";
-                                } else if ($ativi_realizadas[0]['porcentagem'] > 75) {
+                                } else if ($atividades_home[0]['porcentagem'] > 75) {
                                     echo "Opa! Falta pouquinho para você conseguir";
                                 }
                             ?> 
                             <span>
-                                <?php echo $ativi_realizadas[0]['premio']['Premiacao']['titulo']; ?>
+                                <?php echo $atividades_home[0]['Premiacao']['titulo']; ?>
                             </span>
                         </h3>
                     <?php 
                     } else { 
                     ?>
                         <h3 class="premio text-center">
-                            Ei, bora fazer as atividades? Quem sabe você não consegue alguma recompensa bacana! ;)<br /><br />
+                            Eeei! Bora fazer alguma atividade? Quem sabe você não consegue alguma recompensa bacana! ;)<br /><br />
                             <a href="<?php echo $this->Html->url(array('controller' => 'atividades', 'action' => 'ativ_alunos')) ?>" class="btn btn-default btn-lg">Atividades pra você.</a>
                         </h3>
                     <?php } ?>
@@ -69,8 +69,12 @@
                                             </div>
                                             <div class="col-xs-2 col-md-2">
                                                 <div class="pontos">
+                                                    <?php if ($ativa['Atividade']['tipo_atividade'] == 2) { ?>
                                                     <span><?php echo $ativa['Premiacao']['pontos_individuais'] ?></span>
                                                     <p>pontos</p>
+                                                    <?php } else { ?>
+                                                    <span>Avaliativo</span>
+                                                    <?php } ?>
                                                     <div class="clearfix"></div>
                                                 </div>
                                             </div>
@@ -96,11 +100,13 @@
                                                 <div class="titulo"><?php echo $realizadas['Atividade']['titulo']; ?></div>
                                             </div>
                                             <div class="col-xs-2 col-md-2">
-                                                <div class="pontos">
+                                                <?php if ($realizadas['Atividade']['tipo_atividade'] == 2) { ?>
                                                     <span><?php echo $realizadas['Premiacao']['pontos_individuais'] ?></span>
                                                     <p>pontos</p>
+                                                    <?php } else { ?>
+                                                    <span>Avaliativo</span>
+                                                    <?php } ?>
                                                     <div class="clearfix"></div>
-                                                </div>
                                             </div>
                                             <a href="<?php echo $this->Html->url(array('controller' => 'atividades', 'action' => 'atividade', $realizadas['Atividade']['id'])); ?>" class="btn btn-default">Fazer atividade</a>
                                         </div>
@@ -114,11 +120,11 @@
                         <div id="recompensas" class="tab-pane fade">
                             <h2 class="title green">Minhas recompensas</h2>
                             <?php 
-                            foreach ($premiacao_user as $key => $premio) {
+                            foreach ($premiacoes as $key => $premio) {
                             ?>
                             <div class="col-xs-6 col-md-4 content">
-                                <img src="<?php echo $this->webroot . 'fotos/' . $premio['Premiacao']['user_id'] . '/premios/' . $premio['Premiacao']['id'] . '/' . $premio['Premiacao']['foto_premio'] ?>" width="350" height="200" class="img-responsive">
-                                <h3>01 ponto na P2</h3>
+                                <img src="<?php echo $this->webroot . 'fotos/' . $premio['user_id'] . '/premios/' . $premio['id'] . '/' . $premio['foto_premio'] ?>" width="350" height="200" class="img-responsive">
+                                <h3><?php echo $premio['titulo'] ?></h3>
                             </div>
                             <?php } ?>
                         </div>

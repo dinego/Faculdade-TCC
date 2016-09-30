@@ -194,6 +194,7 @@ Class AtividadesController extends AppController {
 
 			$this->loadModel('AcessoAtividade');
 			$this->loadModel('Grupo');
+			$this->loadModel('Alternativa');
 
 			$todosGrupos = $this->Grupo->find('all', array('conditions' => array('user_id' => $this->Auth->user('id'))));
 			$grpAcesso = $this->AcessoAtividade->find('all', array('conditions' => array('atividade_id' => $id)));
@@ -202,20 +203,17 @@ Class AtividadesController extends AppController {
 			$gruposAtivos = array();
 
 			foreach ($todosGrupos as $key => $todos) {
-				
-				
+				$inativos[$todos['Grupo']['id']] = $this->Grupo->findById($todos['Grupo']['id']);
 				foreach ($grpAcesso as $key => $ativos) {
-					$inativos[$todos['Grupo']['id']] = $this->Grupo->findById($todos['Grupo']['id']);
 
 					$gruposAtivos[$ativos['AcessoAtividade']['grupo_id']] = $this->Grupo->findById($ativos['AcessoAtividade']['grupo_id']);
-
 				}
 			}
 
-			$this->set('inativos', array_diff($inativos, $gruposAtivos));
+			
+			@$this->set('inativos', array_diff_assoc($inativos, $gruposAtivos));
 			$this->set('ativos', $gruposAtivos);
 
-			
 			$this->loadModel('Grupo');
 			$grupos = $this->Grupo->find('all', array(
 	    		'conditions' => array('Grupo.user_id =' => $this->Auth->user('id')),
@@ -225,42 +223,45 @@ Class AtividadesController extends AppController {
 
 			$this->set('atividade', $this->Atividade->findById($id));
 			if ($this->request->is('post') || $this->request->is('put')) {
+
+				$range = $this->request->data['Atividade']['rangeData'];
+
+				$range2 = array();
+				$range2 = explode(' ', $range);
+
+				$inicio = $range2[0];
+				$dateInicio = str_replace('/', '-', $inicio);
+
+				$fim = $range2[2];
+				$dateFim = str_replace('/', '-', $fim);
+
+
+				$this->request->data['Atividade']['inicio'] = date('Y-m-d', strtotime($dateInicio));
+				$this->request->data['Atividade']['fim'] = date('Y-m-d', strtotime($dateFim));
+
 				if (!empty($this->request->data['Atividade']['arquivo'])) {
 					if ($this->request->data['Atividade']['arquivo']['error'] != 4) {
 						$arquivo = $this->request->data['Atividade']['arquivo'];
-						// Tamanho máximo do arquivo (em Bytes)
 			            $_UP['tamanho'] = 2048 * 2048 * 2; // 2Mb
-			            // Array com as extensões permitidas
 			            $_UP['extensoes'] = array('doc', 'rar', 'zip', 'pdf');
-			            // Renomeia o arquivo? (Se true, o arquivo será salvo como .jpg e um nome único)
 			            $_UP['renomeia'] = false;
-			            // Array com os tipos de erros de upload do PHP
 			            $_UP['erros'][0] = 'Não houve erro';
 			            $_UP['erros'][1] = 'O arquivo no upload é maior do que o limite do PHP';
 			            $_UP['erros'][2] = 'O arquivo ultrapassa o limite de tamanho especifiado no HTML';
 			            $_UP['erros'][3] = 'O upload do arquivo foi feito parcialmente';
 			            $_UP['erros'][4] = 'Não foi feito o upload do arquivo';
-			            // Verifica se houve algum erro com o upload. Se sim, exibe a mensagem do erro
 			            if ($arquivo['error'] != 0) {
 			              die("Não foi possível fazer o upload, erro:" . $_UP['erros'][$arquivo['error']]);
-			              exit; // Para a execução do script
+			              exit; 
 			            }
-			            // Caso script chegue a esse ponto, não houve erro com o upload e o PHP pode continuar
-			            // Faz a verificação da extensão do arquivo
+
 			            $foto = $arquivo['name'];
 			            $ext = pathinfo($foto, PATHINFO_EXTENSION);
-
-			            /*if (array_search($ext, $_UP['extensoes']) === false) {
-			            	var_dump($ext);
-			              $this->Flash->error(__("Por favor, envie arquivos com as seguintes extensões: jpg, png ou gif"));
-			              exit;
-			            }*/
-
-			            // Faz a verificação do tamanho do arquivo
 			            if ($_UP['tamanho'] < $arquivo['size']) {
 			              $this->Flash->error(__("O arquivo enviado é muito grande, envie arquivos de até 2Mb."));
 			              exit;
 			            }
+
 			            // O arquivo passou em todas as verificações, hora de tentar movê-lo para a pasta
 			            // Primeiro verifica se deve trocar o nome do arquivo
 			            if ($_UP['renomeia'] == true) {
@@ -278,15 +279,19 @@ Class AtividadesController extends AppController {
 
 		            $this->request->data['Atividade']['user_id'] = $this->Auth->user('id');
 
+		            
 		            if ($this->request->data['Atividade']['tipo_atividade'] == 2) {
-			            $alternativaCorreta = $this->request->data["RespostaAtividade"]["alternativa_id"];
+		            	$this->Alternativa->deleteAll(array('Alternativa.atividade_id' => $id));
+			            @$alternativaCorreta = $this->request->data["RespostaAtividade"]["alternativa_id"];
 			            $this->request->data['Alternativa'][$alternativaCorreta]['correta'] = 1;
+		            } else {
+		            	$this->request->data["RespostaAtividade"] = "";
 		            }
 
-
-		            if ($this->Atividade->saveAll($this->request->data)) {
+		            if ($this->Atividade->saveAll($this->request->data)) {		            	
+		            	
 		            	if (!empty($this->request->data['Atividade']['arquivo'])) {
-			                $_UP['pasta'] = WWW_ROOT . "fotos/" . $user['id'] . "/atividades/auxiliar/" . $this->Atividade->id . "/";
+			                $_UP['pasta'] = WWW_ROOT . "fotos/" . $this->Auth->user('id') . "/atividades/auxiliar/" . $this->Atividade->id . "/";
 
 			                if (!file_exists($_UP['pasta'])) {
 			                    mkdir($_UP['pasta'], 0777, true);
@@ -296,20 +301,24 @@ Class AtividadesController extends AppController {
 			            }
 
 			            $this->loadModel('AcessoAtividade');
-			            
-		            	var_dump($this->request->data);
-		            	die();		            
-		            
-						foreach ($this->request->data["GruposAcesso"]["grupos"] as $key => $grupo) {
-							$this->AcessoAtividade->create();
-							$this->request->data['AcessoAtividade']['grupo_id'] = $grupo;
-							$this->request->data['AcessoAtividade']['atividade_id'] = $this->Atividade->id;
-							$this->AcessoAtividade->save($this->request->data);
+		            	$this->AcessoAtividade->deleteAll(array('AcessoAtividade.atividade_id' => $id));
+		            	if (!empty($this->request->data["GruposAcesso"]["grupos"])) {
+							foreach ($this->request->data["GruposAcesso"]["grupos"] as $key => $grupo) {
+								$this->AcessoAtividade->create();
+								$this->request->data['AcessoAtividade']['grupo_id'] = $grupo;
+								$this->request->data['AcessoAtividade']['atividade_id'] = $this->Atividade->id;
+								$this->AcessoAtividade->save($this->request->data);
+							}
 						}
-						
+
+						if ($this->request->data['Atividade']['tipo_atividade'] == 1) {
+							$this->Alternativa->deleteAll(array('Alternativa.atividade_id' => $id));
+						}
+
 		                $this->Flash->success(__('Atividade salva com Sucesso'));
-		                $this->redirect(array('action' => 'index'));
+		            	$this->redirect(array('controller' => 'atividades', 'action' => 'index'));
 		            } else {
+		            	$this->redirect(array('action' => 'index'));
 		                $this->Flash->error(__('Não conseguimos salvar a atividade! Erro:' . $_UP['erros']));
 		            }
 		        }
@@ -401,6 +410,20 @@ Class AtividadesController extends AppController {
 		}
 
 		$this->set('respUsers', $respUsers);
+
+		if ($this->request->is('post') || $this->request->is('put')) {
+			$this->loadModel('RespoDissertativa');
+
+			$this->RespoDissertativa->id = $this->request->data['usr'];
+			$this->request->data['RespoDissertativa']['id'] = $this->request->data['usr'];
+			$this->request->data['RespoDissertativa']['pontos'] = $this->request->data['pts'];
+
+			if ($this->RespoDissertativa->save($this->request->data)) {
+				die("Pontos salvo com sucesso!");
+			} else {
+				die('Ops, não conseguimos salvar, tente mais tarde.');
+			}
+		}
 	}
 
 	public function atividade($id = null)
